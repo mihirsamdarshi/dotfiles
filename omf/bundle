@@ -1,0 +1,10 @@
+package bass
+package brew
+package https://github.com/FabioAntunes/fish-nvm
+package https://github.com/PatrickF1/fzf.fish
+package https://github.com/aliz-ai/google-cloud-sdk-fish-completion
+package https://github.com/andreiborisov/sponge
+package https://github.com/halostatue/fish-docker
+package https://github.com/jorgebucaran/autopair.fish
+theme default
+theme pure

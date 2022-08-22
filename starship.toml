@@ -1,0 +1,179 @@
+# Get editor completions based on the config schema
+"$schema" = 'https://starship.rs/config-schema.json'
+
+format = """
+\ue711 \
+$username\
+$hostname\
+$localip\
+$shlvl\
+$singularity\
+$kubernetes\
+$directory\
+$vcsh\
+$git_branch\
+$git_commit\
+$git_state\
+$git_metrics\
+$git_status\
+$line_break\
+$character"""
+
+right_format = """
+$docker_context\
+$package\
+$buf\
+$c\
+$cmake\
+$cobol\
+$container\
+$daml\
+$dart\
+$deno\
+$dotnet\
+$elixir\
+$elm\
+$erlang\
+$golang\
+$haskell\
+$helm\
+$java\
+$julia\
+$kotlin\
+$lua\
+$nim\
+$nodejs\
+$ocaml\
+$perl\
+$php\
+$pulumi\
+$purescript\
+$python\
+$rlang\
+$red\
+$ruby\
+$rust\
+$scala\
+$swift\
+$terraform\
+$vlang\
+$vagrant\
+$zig\
+$nix_shell\
+$conda\
+$spack\
+$memory_usage\
+$aws\
+$gcloud\
+$openstack\
+$azure\
+$env_var\
+$crystal\
+$custom\
+$sudo\
+$cmd_duration\
+$jobs\
+$battery\
+$time\
+$status\
+$shell
+"""
+# Inserts a blank line between shell prompts
+add_newline = true
+
+[fill]
+symbol = " "
+
+[time]
+disabled = false
+format = "\uf64f [$time]($style) "
+time_format = "%r"
+style = "#678686"
+
+[cmd_duration]
+format = "\uf253 [$duration]($style) "
+style = "#4e5252"
+
+[directory]
+home_symbol = "\uf015 ~"
+read_only = " \uf83d"
+
+[git_status]
+format = '([\[$all_status$ahead_behind\]]($style) )'
+untracked = '[?\($untracked\)](red)'
+staged = '[+\($count\)](green)'
+ahead = "⇡${count}"
+diverged = "⇕⇡${ahead_count}⇣${behind_count}"
+behind = "⇣${count}"
+
+[aws]
+disabled = true
+symbol = "\ue7ad  "
+
+[buf]
+symbol = " "
+
+[c]
+symbol = "\ue61e "
+
+[conda]
+symbol = "\uf62f "
+
+[dart]
+symbol = "\ue798 "
+
+[docker_context]
+symbol = "\uf308 "
+
+[elixir]
+symbol = "\ue62d "
+
+[elm]
+symbol = "\ue62c "
+
+[gcloud]
+symbol = "️\ue7b2 "
+format = 'on [$symbol($project)]($style) '
+[gcloud.project_aliases]
+motrpac-portal-dev = "dev"
+motrpac-portal = "prod"
+
+[git_branch]
+symbol = "\ue725 "
+
+[golang]
+symbol = "\ufcd1 "
+
+[haskell]
+symbol = "\ue777 "
+
+[hg_branch]
+symbol = "\ue725 "
+
+[java]
+symbol = "\ue256 "
+
+[julia]
+symbol = "\ue624 "
+
+[memory_usage]
+symbol = "\uf85a "
+
+[nim]
+symbol = "\uf6a4 "
+
+[nix_shell]
+symbol = "\uf313 "
+
+[nodejs]
+symbol = "\ue718 "
+
+[package]
+symbol = "\uf8d6 "
+
+[python]
+symbol = "\ue235 "
+
+[rust]
+symbol = "\ue7a8 "
+
