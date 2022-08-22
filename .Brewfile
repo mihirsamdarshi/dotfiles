@@ -120,4 +120,4 @@ cask "appcleaner"
 cask "bettertouchtool"
 cask "firefox"
 cask "google-chrome"
-
+cask "zulu"
