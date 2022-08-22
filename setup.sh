@@ -38,6 +38,9 @@ cp starship.toml ~/.config/starship.toml
 
 brew bundle 
 
+# install Oh My fish
+curl https://raw.githubusercontent.com/oh-my-fish/oh-my-fish/master/bin/install | fish
+
 # install the latest version of Node
 nvm install --lts
 # install yarn
