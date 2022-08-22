@@ -24,6 +24,9 @@ fi
 git clone https://github.com/mihirsamdarshi/dotfiles . && cd dotfiles || exit 1
 
 cp .Brewfile ~/.Brewfile
+rm ~/.gitignore
+cp .gitignore ~/.gitignore
+
 mkdir -p ~/.config/omf/
 mkdir -p ~/.config/nvim/
 mkdir -p ~/.config/fish/
