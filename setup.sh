@@ -60,3 +60,13 @@ rustup completions zsh > ~/.zfunc/_rustup
 
 cargo install cargo-expand cargo-flamegraph git-cliff tokio-console grcov cargo-edit
 
+mkdir -p ~/.gitutils
+wget https://repo1.maven.org/maven2/com/madgag/bfg/1.14.0/bfg-1.14.0.jar -o ~/.gitutils/bfg.jar
+
+mkdir -p ~/.gcloud/
+cd ~/.gcloud
+wget https://storage.googleapis.com/cloud-sql-java-connector/v1.6.3/postgres-socket-factory-1.6.3-jar-with-dependencies.jar
+wget https://storage.googleapis.com/cloud-sql-java-connector/v1.6.3/postgres-socket-factory-1.6.3-jar-with-driver-and-dependencies.jar
+wget https://storage.googleapis.com/cloud-sql-java-connector/v1.6.3/mysql-socket-factory-1.6.3-jar-with-dependencies.jar
+wget https://storage.googleapis.com/cloud-sql-java-connector/v1.6.3/mysql-socket-factory-1.6.3-jar-with-driver-and-dependencies.jar
+
