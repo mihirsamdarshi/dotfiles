@@ -6,3 +6,9 @@ function map(mode, lhs, rhs, opts)
     vim.api.nvim_set_keymap(mode, lhs, rhs, options)
 end
 
+map("n", ";", "l", {})
+map("n", "l", "k", {})
+map("n", "k", "j", {})
+map("n", "j", "h", {})
+map("n", "h", ";", {})
+

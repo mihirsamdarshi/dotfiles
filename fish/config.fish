@@ -9,8 +9,6 @@ test -e {$HOME}/.iterm2_shell_integration.fish ; and source {$HOME}/.iterm2_shel
 
 # Shorthand for venv creation
 alias newvenv='python3 -m venv venv && source venv/bin/activate.fish && pip install --upgrade pip setuptools wheel'
-alias ls=exa
-alias vim=nvim
 
 alias gscatjq=gsutilcatpipetojq
 

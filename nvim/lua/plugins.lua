@@ -14,24 +14,38 @@ return require('packer').startup(function()
             ensure_installed = { "sumneko_lua", "rust_analyzer", "tsserver", "pyright" }
         }) end
     }
-    use 'neovim/nvim-lspconfig' 
-    
+   
+    use { -- A collection of common configurations for Neovim's built-in language server client
+          'neovim/nvim-lspconfig',
+          config = [[ require('plugins/lspconfig') ]]
+    }
+
+    use { -- vscode-like pictograms for neovim lsp completion items Topics
+          'onsails/lspkind-nvim',
+          config = [[ require('plugins/lspkind') ]]
+    }
+
+    use { -- Utility functions for getting diagnostic status and progress messages from LSP servers, for use in the Neovim statusline
+          'nvim-lua/lsp-status.nvim',
+          config = [[ require('plugins/lspstatus') ]]
+    }
+
     -- Language plugins
     use 'simrat39/rust-tools.nvim'
 
-    -- Completion framework:
-    use 'hrsh7th/nvim-cmp' 
-
-    -- LSP completion source:
-    use 'hrsh7th/cmp-nvim-lsp'
-
-    -- Useful completion sources:
-    use 'hrsh7th/cmp-nvim-lua'
-    use 'hrsh7th/cmp-nvim-lsp-signature-help'
-    use 'hrsh7th/cmp-vsnip'                             
-    use 'hrsh7th/cmp-path'                              
-    use 'hrsh7th/cmp-buffer'                            
-    use 'hrsh7th/vim-vsnip'
+    use { -- A completion framework for neovim
+        'hrsh7th/nvim-cmp',
+        requires = {
+            "hrsh7th/cmp-nvim-lsp",           -- nvim-cmp source for neovim builtin LSP client
+            'hrsh7th/cmp-nvim-lsp-signature-help',
+            "hrsh7th/cmp-nvim-lua",           -- nvim-cmp source for nvim lua
+            "hrsh7th/cmp-buffer",             -- nvim-cmp source for buffer words.
+            "hrsh7th/cmp-path",               -- nvim-cmp source for filesystem paths.
+            "hrsh7th/cmp-calc",               -- nvim-cmp source for math calculation.
+            'hrsh7th/vim-vsnip'
+        },
+        config = [[ require('plugins/cmp') ]],
+    }
 
     -- Tree-sitter
     use {
@@ -62,6 +76,9 @@ return require('packer').startup(function()
         requires = 'kyazdani42/nvim-web-devicons',
         config = function() require('trouble').setup {} end
     }
+
+    -- Add TeX support
+    use 'lervag/vimtex'
     
     -- Highlight function arguments
     use {
@@ -72,9 +89,7 @@ return require('packer').startup(function()
     -- Make commenting easier
     use {
         'numToStr/Comment.nvim',
-        config = function()
-            require('Comment').setup()
-        end
+        config = function() require('Comment').setup() end
     }
 
     -- Auto-indent blank lines
