@@ -2,26 +2,35 @@
 
 set -e
 
+if [[ $(xcode-select -p) == "" ]]; then
 # install Mac dev tools
-xcode-select --install
+  xcode-select --install
+fi;
 
+if ! [ -d ~/.oh-my-zsh ]; then 
 # install oh my zsh
-sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+  sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+fi;
 
+
+if ! [ command -v brew ]; then
 # install Homebrew
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-# install nvm
-curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash
+  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+fi;
 
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+if ! [ command -v nvm ]; then
+  # install nvm
+  curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash
+  export NVM_DIR="$HOME/.nvm"
+  [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+fi;
 
 if [ ! -f ~/.zshrc ]; then
   rm -rf ~/.zshrc
 fi
 
 # clone the dotfiles repo
-git clone https://github.com/mihirsamdarshi/dotfiles . && cd dotfiles || exit 1
+git clone https://github.com/mihirsamdarshi/dotfiles .dotfiles && cd .dotfiles || exit 1
 
 cp .Brewfile ~/.Brewfile
 rm ~/.gitignore
