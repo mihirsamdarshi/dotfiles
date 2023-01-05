@@ -17,17 +17,4 @@ function gsutilcatpipetojq
   gsutil cat "$JSON_FILE" | jq $argv[2..-1]
 end
 
-function mkdir -d "Create a directory and set CWD"
-    command mkdir $argv
-    if test $status = 0
-        switch $argv[(count $argv)]
-            case '-*'
-
-            case '*'
-                cd $argv[(count $argv)]
-                return
-        end
-    end
-end
-
 
