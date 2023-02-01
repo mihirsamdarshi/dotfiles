@@ -2,21 +2,28 @@
 
 set -e
 
-if [[ $(xcode-select -p) == "" ]]; then
-# install Mac dev tools
-  xcode-select --install
-fi;
+sudo apt update
+sudo apt upgrade -y
+
+sudo add-apt-repository -y ppa:neovim-ppa/unstable
+sudo add-apt-repository -y ppa:fish-shell/release-3
+
+# tools
+sudo apt install -y tmux fish neovim fzf curl wget jq bc findutils gawk software-properties-common
+# developer libraries
+sudo apt install -y build-essential binutils libssl-dev libwebkit2gtk-4.0-dev \
+    libgtk-3-dev libayatana-appindicator3-dev librsvg2-dev pango gdk libcairo2-dev \
+    libgdk-pixbuf-2.0-dev libgdk-pixbuf-2.0 gdk-pixbuf libdbus-1-dev pkg-config \
+    p7zip-full parted util-linux zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev \
+    libncursesw5-dev xz-utils tk-dev libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev
+# sensors
+sudo apt install -y lm-sensors hddtemp tilix neofetch conky-all htop
 
 if ! [ -d ~/.oh-my-zsh ]; then 
 # install oh my zsh
   sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 fi;
 
-
-if ! [ command -v brew ]; then
-# install Homebrew
-  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-fi;
 
 if ! [ command -v nvm ]; then
   # install nvm
@@ -32,7 +39,6 @@ fi
 # clone the dotfiles repo
 git clone https://github.com/mihirsamdarshi/dotfiles .dotfiles && cd .dotfiles || exit 1
 
-cp .Brewfile ~/.Brewfile
 rm ~/.gitignore
 cp .gitignore ~/.gitignore
 
@@ -47,11 +53,6 @@ cp -r nvim ~/.config/nvim
 ln -s ~/.config/nvim/init.lua ~/.vimrc
 
 cp starship.toml ~/.config/starship.toml
-
-brew bundle 
-
-# install Oh My fish
-curl https://raw.githubusercontent.com/oh-my-fish/oh-my-fish/master/bin/install | fish
 
 # install the latest version of Node
 nvm install --lts
@@ -75,10 +76,5 @@ cargo install cargo-expand cargo-flamegraph git-cliff tokio-console grcov cargo-
 mkdir -p ~/.gitutils
 wget https://repo1.maven.org/maven2/com/madgag/bfg/1.14.0/bfg-1.14.0.jar -o ~/.gitutils/bfg.jar
 
-mkdir -p ~/.gcloud/
-cd ~/.gcloud
-wget https://storage.googleapis.com/cloud-sql-java-connector/v1.6.3/postgres-socket-factory-1.6.3-jar-with-dependencies.jar
-wget https://storage.googleapis.com/cloud-sql-java-connector/v1.6.3/postgres-socket-factory-1.6.3-jar-with-driver-and-dependencies.jar
-wget https://storage.googleapis.com/cloud-sql-java-connector/v1.6.3/mysql-socket-factory-1.6.3-jar-with-dependencies.jar
-wget https://storage.googleapis.com/cloud-sql-java-connector/v1.6.3/mysql-socket-factory-1.6.3-jar-with-driver-and-dependencies.jar
-
+# install Oh My fish
+curl https://raw.githubusercontent.com/oh-my-fish/oh-my-fish/master/bin/install | fish
