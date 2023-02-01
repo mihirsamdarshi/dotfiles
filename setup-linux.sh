@@ -9,7 +9,7 @@ sudo add-apt-repository -y ppa:neovim-ppa/unstable
 sudo add-apt-repository -y ppa:fish-shell/release-3
 
 # tools
-sudo apt install -y tmux fish neovim fzf curl wget jq bc findutils gawk software-properties-common
+sudo apt install -y tmux fish neovim fzf curl wget jq bc findutils gawk software-properties-common font-manager
 # developer libraries
 sudo apt install -y build-essential binutils libssl-dev libwebkit2gtk-4.0-dev \
     libgtk-3-dev libayatana-appindicator3-dev librsvg2-dev pango gdk libcairo2-dev \
