@@ -8,16 +8,20 @@ sudo apt upgrade -y
 sudo add-apt-repository -y ppa:neovim-ppa/unstable
 sudo add-apt-repository -y ppa:fish-shell/release-3
 
-# tools
-sudo apt install -y tmux fish neovim fzf curl wget jq bc findutils gawk software-properties-common font-manager
+sudo apt install -y tmux fish neovim fzf curl wget jq bc findutils gawk software-properties-common font-manager lsb_release
 # developer libraries
-sudo apt install -y build-essential binutils libssl-dev libwebkit2gtk-4.0-dev \
+sudo apt install -y python3-pip build-essential binutils libssl-dev libwebkit2gtk-4.0-dev \
     libgtk-3-dev libayatana-appindicator3-dev librsvg2-dev pango gdk libcairo2-dev \
     libgdk-pixbuf-2.0-dev libgdk-pixbuf-2.0 gdk-pixbuf libdbus-1-dev pkg-config \
     p7zip-full parted util-linux zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev \
     libncursesw5-dev xz-utils tk-dev libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev
 # sensors
 sudo apt install -y lm-sensors hddtemp tilix neofetch conky-all htop
+
+sudo sh -c "echo 'deb [arch=amd64 signed-by=/usr/share/keyrings/oracle-virtualbox-2016.gpg] https://download.virtualbox.org/virtualbox/debian $(lsb_release -sc) contrib' >> /etc/apt/sources.list"
+wget -O- https://www.virtualbox.org/download/oracle_vbox_2016.asc | sudo gpg --dearmor --yes --output /usr/share/keyrings/oracle-virtualbox-2016.gpg
+sudo apt-get update
+sudo apt-get install virtualbox-7.0
 
 if ! [ -d ~/.oh-my-zsh ]; then 
 # install oh my zsh

@@ -25,8 +25,8 @@ conky.config = {
 	gap_x = 10,
 	gap_y = 45,
 	minimum_height = 1100,
-	minimum_width = 280,
-	maximum_width = 280,
+	minimum_width = 300,
+	maximum_width = 300,
 
 	--Graphical
 
@@ -40,7 +40,7 @@ conky.config = {
 	--Textual
 	
 	format_human_readable = true,
-	font = 'ubuntu:size=9:bold',
+	font = 'ubuntu:size=10:bold',
 	max_text_width = 0,
 	short_units = true,
 	use_xft = true,

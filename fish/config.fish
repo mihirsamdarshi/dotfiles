@@ -9,7 +9,7 @@ else if [ (uname -s) = "Linux" ]
 end
 
 starship init fish | source
-eval "$(pyenv init -)"
+pyenv init - | source
 
 
 # Shorthand for venv creation
