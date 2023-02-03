@@ -32,7 +32,7 @@ fi
 # clone the dotfiles repo
 git clone https://github.com/mihirsamdarshi/dotfiles .dotfiles && cd .dotfiles || exit 1
 
-cp .Brewfile ~/.Brewfile
+cp Brewfile ~/Brewfile
 rm ~/.gitignore
 cp .gitignore ~/.gitignore
 
