@@ -8,7 +8,7 @@ sudo apt upgrade -y
 sudo add-apt-repository -y ppa:neovim-ppa/unstable
 sudo add-apt-repository -y ppa:fish-shell/release-3
 
-sudo apt install -y tmux fish neovim fzf curl wget jq bc findutils gawk software-properties-common font-manager lsb_release
+sudo apt install -y tmux fish neovim fzf curl wget jq bc findutils gawk software-properties-common font-manager lsb-release
 # developer libraries
 sudo apt install -y python3-pip build-essential binutils libssl-dev libwebkit2gtk-4.0-dev \
     libgtk-3-dev libayatana-appindicator3-dev librsvg2-dev pango gdk libcairo2-dev \
@@ -18,14 +18,21 @@ sudo apt install -y python3-pip build-essential binutils libssl-dev libwebkit2gt
 # sensors
 sudo apt install -y lm-sensors hddtemp tilix neofetch conky-all htop
 
+# set up repositories
+sudo mkdir -p /etc/apt/keyrings
+
 sudo sh -c "echo 'deb [arch=amd64 signed-by=/usr/share/keyrings/oracle-virtualbox-2016.gpg] https://download.virtualbox.org/virtualbox/debian $(lsb_release -sc) contrib' >> /etc/apt/sources.list"
 wget -O- https://www.virtualbox.org/download/oracle_vbox_2016.asc | sudo gpg --dearmor --yes --output /usr/share/keyrings/oracle-virtualbox-2016.gpg
 curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg 
 sudo chmod go+r /usr/share/keyrings/githubcli-archive-keyring.gpg
 echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null \
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+echo \
+  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
+  $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
 
 sudo apt-get update
-sudo apt-get install virtualbox-7.0 gh
+sudo apt-get install virtualbox-7.0 gh docker-desktop
 
 if ! [ -d ~/.oh-my-zsh ]; then 
 # install oh my zsh
