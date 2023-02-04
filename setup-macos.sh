@@ -37,21 +37,24 @@ rm ~/.gitignore
 cp .gitignore ~/.gitignore
 
 mkdir -p ~/.config/omf/
-mkdir -p ~/.config/nvim/
 mkdir -p ~/.config/fish/
 
-cp -r fish ~/.config/fish
-cp -r omf ~/.config/omf
-cp -r nvim ~/.config/nvim
+ln -sfv fish/conf/config.fish ~/.config/fish/config.fish
+ln -sfv fish/functions ~/.config/fish/functions
+ln -sfv fish/conf.d ~/.config/fish/conf.d
+ln -sfv omf/bundle-linux ~/.config/omf/bundle
+ln -sfv omf/channel ~/.config/omf/channel
+ln -sfv omf/theme ~/.config/omf/theme
+ln -sfv starship.toml ~/.config/starship.toml
 
-ln -s ~/.config/nvim/init.lua ~/.vimrc
-
-cp starship.toml ~/.config/starship.toml
+ln -sfv kitty/tab_bar.py ~/.config/kitty/tab_bar.py
+ln -sfv kitty/kitty.conf ~/.config/kitty/kitty.conf
+ln -sfv ~/.config/nvim/init.lua ~/.vimrc
 
 brew bundle 
 
 # install Oh My fish
-curl https://raw.githubusercontent.com/oh-my-fish/oh-my-fish/master/bin/install | fish
+fish setup.fish
 
 # install the latest version of Node
 nvm install --lts
