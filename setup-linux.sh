@@ -7,6 +7,18 @@ if [ "$1" == "--headless" ]; then
   IS_HEADLESS=1
 fi
 
+if [ "$IS_HEADLESS" -eq 0 ]; then
+  CONFIRM_MESSAGE="with a GUI"
+else
+  CONFIRM_MESSAGE="headlessly"
+fi
+
+read -p "Setting up Linux ${CONFIRM_MESSAGE}. Continue?:" ans_yn
+case "$ans_yn" in
+  [Yy]|[Yy][Ee][Ss]) echo "Setting up ${CONFIRM_MESSAGE}";;
+  *) exit 1;;
+esac
+
 sudo apt update
 sudo apt upgrade -y
 
@@ -32,48 +44,45 @@ sudo mkdir -p /etc/apt/keyrings
 
 curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg 
 sudo chmod go+r /usr/share/keyrings/githubcli-archive-keyring.gpg
-echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null \
-sudo mkdir -p /etc/apt/keyrings
+
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null
 curl -fsSL https://download.opensuse.org/repositories/devel:kubic:libcontainers:unstable/xUbuntu_$(lsb_release -rs)/Release.key \
   | gpg --dearmor \
   | sudo tee /etc/apt/keyrings/devel_kubic_libcontainers_unstable.gpg > /dev/null
+
 echo \
   "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/devel_kubic_libcontainers_unstable.gpg]\
     https://download.opensuse.org/repositories/devel:kubic:libcontainers:unstable/xUbuntu_$(lsb_release -rs)/ /" \
   | sudo tee /etc/apt/sources.list.d/devel:kubic:libcontainers:unstable.list > /dev/null
 
 sudo apt-get update
-sudo apt-get install gh podman
+sudo apt-get install -y gh podman
 
 if [ "$IS_HEADLESS" -eq 0 ]; then
   sudo apt install -y font-manager tilix conky-all
+
   sudo sh -c "echo 'deb [arch=amd64 signed-by=/usr/share/keyrings/oracle-virtualbox-2016.gpg] https://download.virtualbox.org/virtualbox/debian $(lsb_release -sc) contrib' >> /etc/apt/sources.list"
   wget -O- https://www.virtualbox.org/download/oracle_vbox_2016.asc | sudo gpg --dearmor --yes --output /usr/share/keyrings/oracle-virtualbox-2016.gpg
-
   sudo apt-get update
   sudo apt -get install -y virtualbox-7.0
 fi
 
-if ! [ command -v nvm ]; then
-  # install nvm
-  curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash
-  export NVM_DIR="$HOME/.nvm"
-  [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-fi;
-
-if [ ! -f ~/.zshrc ]; then
-  rm -rf ~/.zshrc
+# if the directory does not exist
+if [ ! -d .dotfiles ]; then
+  # clone the dotfiles repo
+  git clone https://github.com/mihirsamdarshi/dotfiles .dotfiles
 fi
 
-# clone the dotfiles repo
-git clone https://github.com/mihirsamdarshi/dotfiles .dotfiles && cd .dotfiles || exit 1
+cd .dotfiles || exit 1
 
-rm ~/.gitignore
+rm -f ~/.gitignore
 cp .gitignore ~/.gitignore
 
 mkdir -p ~/.config/omf/
 mkdir -p ~/.config/fish/
 
+# link all config files
+# link fish config files
 ln -sfv fish/conf/config.fish ~/.config/fish/config.fish
 ln -sfv fish/functions ~/.config/fish/functions
 ln -sfv fish/conf.d ~/.config/fish/conf.d
@@ -81,16 +90,36 @@ ln -sfv omf/bundle-linux ~/.config/omf/bundle
 ln -sfv omf/channel ~/.config/omf/channel
 ln -sfv omf/theme ~/.config/omf/theme
 ln -sfv starship.toml ~/.config/starship.toml
-
+# link tmux config 
 ln -sfv tmux/.tmux.conf ~/.tmux.conf
 ln -sfv tmux/.tmux.conf.local ~/.tmux.conf.local
-
-ln -sfv ~/.config/nvim/init.lua ~/.vimrc
 
 if [ "$IS_HEADLESS" -eq 0 ]; then
   ln -sfv kitty/tab_bar.py ~/.config/kitty/tab_bar.py
   ln -sfv kitty/kitty.conf ~/.config/kitty/kitty.conf
   ln -sfv .conkyrc ~/.conkyrc
+fi
+
+if ! command -v pyenv &> /dev/null ; then
+  curl https://pyenv.run | bash
+  echo 'export PYENV_ROOT="$HOME/.pyenv"' >> ~/.bashrc
+  echo 'command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.bashrc
+  echo 'eval "$(pyenv init -)"' >> ~/.bashrc
+
+  echo 'export PYENV_ROOT="$HOME/.pyenv"' >> ~/.profile
+  echo 'command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.profile
+  echo 'eval "$(pyenv init -)"' >> ~/.profile
+fi
+
+if ! command -v nvm &> /dev/null ; then
+  # install nvm
+  curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash
+  export NVM_DIR="$HOME/.nvm"
+  [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+fi;
+
+if [ ! -f ~/.zshrc ]; then
+  rm -f ~/.zshrc
 fi
 
 # install the latest version of Node
@@ -117,4 +146,7 @@ wget https://repo1.maven.org/maven2/com/madgag/bfg/1.14.0/bfg-1.14.0.jar -o ~/.g
 
 # install Oh My fish
 fish setup.fish
+
+# setup neovim
+curl -s https://raw.githubusercontent.com/doom-neovim/doom-nvim/main/tools/install.sh | sh
 
