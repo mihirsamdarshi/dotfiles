@@ -1,6 +1,11 @@
 #!/bin/bash
-
 set -e
+
+IS_HEADLESS=0
+
+if [ "$1" == "--headless" ]; then
+  IS_HEADLESS=1
+fi
 
 sudo apt update
 sudo apt upgrade -y
@@ -9,7 +14,7 @@ sudo add-apt-repository -y ppa:neovim-ppa/unstable
 sudo add-apt-repository -y ppa:fish-shell/release-3
 
 sudo apt install -y tmux fish neovim fzf curl wget jq bc findutils gawk \
-    software-properties-common font-manager lsb-release rsync
+    software-properties-common lsb-release rsync
 
 # developer libraries
 sudo apt install -y python3-pip build-essential binutils libssl-dev \
@@ -20,13 +25,11 @@ sudo apt install -y python3-pip build-essential binutils libssl-dev \
     libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev qemu-user-static
 
 # sensors
-sudo apt install -y lm-sensors hddtemp tilix neofetch conky-all htop
+sudo apt install -y lm-sensors neofetch htop
 
 # set up repositories
 sudo mkdir -p /etc/apt/keyrings
 
-sudo sh -c "echo 'deb [arch=amd64 signed-by=/usr/share/keyrings/oracle-virtualbox-2016.gpg] https://download.virtualbox.org/virtualbox/debian $(lsb_release -sc) contrib' >> /etc/apt/sources.list"
-wget -O- https://www.virtualbox.org/download/oracle_vbox_2016.asc | sudo gpg --dearmor --yes --output /usr/share/keyrings/oracle-virtualbox-2016.gpg
 curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg 
 sudo chmod go+r /usr/share/keyrings/githubcli-archive-keyring.gpg
 echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null \
@@ -40,7 +43,16 @@ echo \
   | sudo tee /etc/apt/sources.list.d/devel:kubic:libcontainers:unstable.list > /dev/null
 
 sudo apt-get update
-sudo apt-get install virtualbox-7.0 gh podman
+sudo apt-get install gh podman
+
+if [ "$IS_HEADLESS" -eq 0 ]; then
+  sudo apt install -y font-manager tilix conky-all
+  sudo sh -c "echo 'deb [arch=amd64 signed-by=/usr/share/keyrings/oracle-virtualbox-2016.gpg] https://download.virtualbox.org/virtualbox/debian $(lsb_release -sc) contrib' >> /etc/apt/sources.list"
+  wget -O- https://www.virtualbox.org/download/oracle_vbox_2016.asc | sudo gpg --dearmor --yes --output /usr/share/keyrings/oracle-virtualbox-2016.gpg
+
+  sudo apt-get update
+  sudo apt -get install -y virtualbox-7.0
+fi
 
 if ! [ command -v nvm ]; then
   # install nvm
@@ -73,13 +85,13 @@ ln -sfv starship.toml ~/.config/starship.toml
 ln -sfv tmux/.tmux.conf ~/.tmux.conf
 ln -sfv tmux/.tmux.conf.local ~/.tmux.conf.local
 
-ln -sfv kitty/tab_bar.py ~/.config/kitty/tab_bar.py
-ln -sfv kitty/kitty.conf ~/.config/kitty/kitty.conf
 ln -sfv ~/.config/nvim/init.lua ~/.vimrc
-ln -sfv .conkyrc ~/.conkyrc
 
-# install Oh My fish
-fish setup.fish
+if [ "$IS_HEADLESS" -eq 0 ]; then
+  ln -sfv kitty/tab_bar.py ~/.config/kitty/tab_bar.py
+  ln -sfv kitty/kitty.conf ~/.config/kitty/kitty.conf
+  ln -sfv .conkyrc ~/.conkyrc
+fi
 
 # install the latest version of Node
 nvm install --lts
@@ -104,4 +116,5 @@ mkdir -p ~/.gitutils
 wget https://repo1.maven.org/maven2/com/madgag/bfg/1.14.0/bfg-1.14.0.jar -o ~/.gitutils/bfg.jar
 
 # install Oh My fish
-curl https://raw.githubusercontent.com/oh-my-fish/oh-my-fish/master/bin/install | fish
+fish setup.fish
+
