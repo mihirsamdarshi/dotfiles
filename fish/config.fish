@@ -20,11 +20,20 @@ pyenv init - | source
 # Shorthand for venv creation
 alias newvenv='python3 -m venv venv && source venv/bin/activate.fish && pip install --upgrade pip setuptools wheel'
 
-alias gscatjq=gsutil_cat_and_pipe_to_jq
-
-function gsutil_cat_and_pipe_to_jq
+function gscatjq -d "Pipe the output of `gsutil cat` to jq"
   set JSON_FILE $argv[1]
   gsutil cat "$JSON_FILE" | jq $argv[2..-1]
 end
 
+function jqless -d "Pipe the output of jq to less"
+  set JSON_FILE $argv[1]
+ 
+  set JQ_ARGS "."
+
+  if test (count $argv) -eq 2
+    set JQ_ARGS $argv[2]
+  end
+
+  jq --color-output "$JQ_ARGS" "$JSON_FILE" | less --RAW-CONTROL-CHARS
+end
 

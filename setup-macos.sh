@@ -47,6 +47,9 @@ ln -sfv omf/channel ~/.config/omf/channel
 ln -sfv omf/theme ~/.config/omf/theme
 ln -sfv starship.toml ~/.config/starship.toml
 
+ln -sfv tmux/.tmux.conf ~/.tmux.conf
+ln -sfv tmux/.tmux.conf.local ~/.tmux.conf.local
+
 ln -sfv kitty/tab_bar.py ~/.config/kitty/tab_bar.py
 ln -sfv kitty/kitty.conf ~/.config/kitty/kitty.conf
 ln -sfv ~/.config/nvim/init.lua ~/.vimrc
