@@ -8,30 +8,39 @@ sudo apt upgrade -y
 sudo add-apt-repository -y ppa:neovim-ppa/unstable
 sudo add-apt-repository -y ppa:fish-shell/release-3
 
-sudo apt install -y tmux fish neovim fzf curl wget jq bc findutils gawk software-properties-common font-manager lsb_release
+sudo apt install -y tmux fish neovim fzf curl wget jq bc findutils gawk \
+    software-properties-common font-manager lsb-release rsync
+
 # developer libraries
-sudo apt install -y python3-pip build-essential binutils libssl-dev libwebkit2gtk-4.0-dev \
-    libgtk-3-dev libayatana-appindicator3-dev librsvg2-dev pango gdk libcairo2-dev \
-    libgdk-pixbuf-2.0-dev libgdk-pixbuf-2.0 gdk-pixbuf libdbus-1-dev pkg-config \
-    p7zip-full parted util-linux zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev \
-    libncursesw5-dev xz-utils tk-dev libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev
+sudo apt install -y python3-pip build-essential binutils libssl-dev \
+    libwebkit2gtk-4.0-dev libgtk-3-dev libayatana-appindicator3-dev \
+    librsvg2-dev libcairo2-dev libgdk-pixbuf-2.0-dev libdbus-1-dev \
+    pkg-config p7zip-full parted util-linux zlib1g-dev libbz2-dev \
+    libreadline-dev libsqlite3-dev libncursesw5-dev xz-utils tk-dev \
+    libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev qemu-user-static
+
 # sensors
 sudo apt install -y lm-sensors hddtemp tilix neofetch conky-all htop
+
+# set up repositories
+sudo mkdir -p /etc/apt/keyrings
 
 sudo sh -c "echo 'deb [arch=amd64 signed-by=/usr/share/keyrings/oracle-virtualbox-2016.gpg] https://download.virtualbox.org/virtualbox/debian $(lsb_release -sc) contrib' >> /etc/apt/sources.list"
 wget -O- https://www.virtualbox.org/download/oracle_vbox_2016.asc | sudo gpg --dearmor --yes --output /usr/share/keyrings/oracle-virtualbox-2016.gpg
 curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg 
 sudo chmod go+r /usr/share/keyrings/githubcli-archive-keyring.gpg
 echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null \
+sudo mkdir -p /etc/apt/keyrings
+curl -fsSL https://download.opensuse.org/repositories/devel:kubic:libcontainers:unstable/xUbuntu_$(lsb_release -rs)/Release.key \
+  | gpg --dearmor \
+  | sudo tee /etc/apt/keyrings/devel_kubic_libcontainers_unstable.gpg > /dev/null
+echo \
+  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/devel_kubic_libcontainers_unstable.gpg]\
+    https://download.opensuse.org/repositories/devel:kubic:libcontainers:unstable/xUbuntu_$(lsb_release -rs)/ /" \
+  | sudo tee /etc/apt/sources.list.d/devel:kubic:libcontainers:unstable.list > /dev/null
 
 sudo apt-get update
-sudo apt-get install virtualbox-7.0 gh
-
-if ! [ -d ~/.oh-my-zsh ]; then 
-# install oh my zsh
-  sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
-fi;
-
+sudo apt-get install virtualbox-7.0 gh podman
 
 if ! [ command -v nvm ]; then
   # install nvm
