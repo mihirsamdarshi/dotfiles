@@ -13,31 +13,31 @@ else
   CONFIRM_MESSAGE="headlessly"
 fi
 
-read -rp "Setting up Linux ${CONFIRM_MESSAGE}. Continue?:" ans_yn
+read -rp "Setting up Debian-flavored install ${CONFIRM_MESSAGE}. Continue?:" ans_yn
 case "$ans_yn" in
 [Yy] | [Yy][Ee][Ss]) echo "Setting up ${CONFIRM_MESSAGE}" ;;
 *) exit 1 ;;
 esac
 
-sudo apt update
-sudo apt upgrade -y
+sudo apt-get update
+sudo apt-get upgrade -y
 
 sudo add-apt-repository -y ppa:neovim-ppa/unstable
 sudo add-apt-repository -y ppa:fish-shell/release-3
 
-sudo apt install -y tmux fish neovim fzf curl wget jq bc findutils gawk \
+sudo apt-get install -y tmux fish neovim fzf curl wget jq bc findutils gawk \
   software-properties-common lsb-release rsync
 
 # developer libraries
-sudo apt install -y python3-pip build-essential binutils libssl-dev \
+sudo apt-get install -y python3-pip build-essential binutils libssl-dev \
   libwebkit2gtk-4.0-dev libgtk-3-dev libayatana-appindicator3-dev \
   librsvg2-dev libcairo2-dev libgdk-pixbuf-2.0-dev libdbus-1-dev \
   pkg-config p7zip-full parted util-linux zlib1g-dev libbz2-dev \
   libreadline-dev libsqlite3-dev libncursesw5-dev xz-utils tk-dev \
-  libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev qemu-user-static
-
+  libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev qemu-user-static \
+  linux-tools-common linux-tools-generic "linux-tools-$(uname -r)" 
 # sensors
-sudo apt install -y lm-sensors neofetch htop
+sudo apt-get install -y lm-sensors neofetch htop
 
 # set up repositories
 sudo mkdir -p /etc/apt/keyrings
@@ -152,7 +152,7 @@ rustup completions fish >~/.config/fish/completions/rustup.fish
 source "$HOME/.cargo/env"
 
 cargo install cargo-binstall
-cargo binstall cargo-expand cargo-flamegraph git-cliff tokio-console grcov cargo-edit
+cargo binstall cargo-expand flamegraph git-cliff tokio-console grcov cargo-edit
 
 mkdir -p ~/.gitutils
 wget https://repo1.maven.org/maven2/com/madgag/bfg/1.14.0/bfg-1.14.0.jar -o ~/.gitutils/bfg.jar
