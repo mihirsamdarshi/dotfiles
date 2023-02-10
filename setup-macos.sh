@@ -3,20 +3,19 @@
 set -e
 
 if [[ $(xcode-select -p) == "" ]]; then
-# install Mac dev tools
+  # install Mac dev tools
   xcode-select --install
-fi;
+fi
 
-if [ ! -d ~/.oh-my-zsh ]; then 
-# install oh my zsh
+if [ ! -d ~/.oh-my-zsh ]; then
+  # install oh my zsh
   sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
-fi;
+fi
 
-
-if ! command -v brew ; then
-# install Homebrew
+if ! command -v brew; then
+  # install Homebrew
   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-fi;
+fi
 
 if [ ! -f ~/.zshrc ]; then
   rm -rf ~/.zshrc
@@ -41,9 +40,12 @@ ln -sfv ~/.dotfiles/omf/bundle-linux ~/.config/omf/bundle
 ln -sfv ~/.dotfiles/omf/channel ~/.config/omf/channel
 ln -sfv ~/.dotfiles/omf/theme ~/.config/omf/theme
 ln -sfv ~/.dotfiles/starship.toml ~/.config/starship.toml
-# link tmux config 
+# link tmux config
 ln -sfv ~/.dotfiles/tmux/.tmux.conf ~/.tmux.conf
 ln -sfv ~/.dotfiles/tmux/.tmux.conf.local ~/.tmux.conf.local
+
+# link iterm2 config
+ln -sfv ~/.dotfiles/iterm2 ~/.iterm2
 
 # go back to the home directory
 cd ~ || exit 1
@@ -106,13 +108,13 @@ pyenv global 3.10.10
 # Install Rust
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- --default-toolchain nightly --profile minimal -y
 
-rustup completions fish > ~/.config/fish/completions/rustup.fish
+rustup completions fish >~/.config/fish/completions/rustup.fish
 mkdir -p ~/.zfunc
-rustup completions zsh > ~/.zfunc/_rustup
+rustup completions zsh >~/.zfunc/_rustup
 # shellcheck source=/dev/null
 source "$HOME/.cargo/env"
 
-cargo install cargo-binstall 
+cargo install cargo-binstall
 cargo binstall cargo-expand flamegraph git-cliff tokio-console grcov cargo-edit cargo-watch cargo-update
 
 mkdir -p ~/.gitutils
@@ -130,4 +132,3 @@ wget https://storage.googleapis.com/cloud-sql-java-connector/v1.6.3/postgres-soc
 wget https://storage.googleapis.com/cloud-sql-java-connector/v1.6.3/postgres-socket-factory-1.6.3-jar-with-driver-and-dependencies.jar
 wget https://storage.googleapis.com/cloud-sql-java-connector/v1.6.3/mysql-socket-factory-1.6.3-jar-with-dependencies.jar
 wget https://storage.googleapis.com/cloud-sql-java-connector/v1.6.3/mysql-socket-factory-1.6.3-jar-with-driver-and-dependencies.jar
-

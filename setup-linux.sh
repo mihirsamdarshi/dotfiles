@@ -35,7 +35,7 @@ sudo apt-get install -y python3-pip build-essential binutils libssl-dev \
   pkg-config p7zip-full parted util-linux zlib1g-dev libbz2-dev \
   libreadline-dev libsqlite3-dev libncursesw5-dev xz-utils tk-dev \
   libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev qemu-user-static \
-  linux-tools-common linux-tools-generic "linux-tools-$(uname -r)" 
+  linux-tools-common linux-tools-generic "linux-tools-$(uname -r)"
 # sensors
 sudo apt-get install -y lm-sensors neofetch htop
 
