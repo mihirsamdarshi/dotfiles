@@ -97,10 +97,10 @@ if ! command -v pyenv &>/dev/null; then
 fi
 
 # install Python versions 3.8, 3.9, and 3.10 and set 3.10 to the global Python3 install
-pyenv install 3.8.16
-pyenv install 3.9.10
-pyenv install 3.10.10
-pyenv install 3.11.2
+pyenv install -s 3.8.16
+pyenv install -s 3.9.10
+pyenv install -s 3.10.10
+pyenv install -s 3.11.2
 pyenv global 3.10.10
 
 # Install Rust

@@ -47,7 +47,7 @@ curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo 
 sudo chmod go+r /usr/share/keyrings/githubcli-archive-keyring.gpg
 echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list >/dev/null
 # add the Podman repository
-curl -fsSL https://download.opensuse.org/repositories/devel:kubic:libcontainers:unstable/xUbuntu_$(lsb_release -rs)/Release.key |
+curl -fsSL "https://download.opensuse.org/repositories/devel:kubic:libcontainers:unstable/xUbuntu_$(lsb_release -rs)/Release.key" |
   gpg --dearmor |
   sudo tee /etc/apt/keyrings/devel_kubic_libcontainers_unstable.gpg >/dev/null
 echo \
@@ -138,10 +138,10 @@ nvm use --lts
 corepack enable
 
 # install Python versions 3.8, 3.9, and 3.10 and set 3.10 to the global Python3 install
-pyenv install 3.8.16
-pyenv install 3.9.10
-pyenv install 3.10.10
-pyenv install 3.11.2
+pyenv install -s 3.8.16
+pyenv install -s 3.9.10
+pyenv install -s 3.10.10
+pyenv install -s 3.11.2
 pyenv global 3.10.10
 
 # Install Rust
