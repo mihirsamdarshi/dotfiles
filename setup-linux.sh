@@ -101,6 +101,11 @@ if [ "$IS_HEADLESS" -eq 0 ]; then
   ln -sfv .conkyrc ~/.conkyrc
 fi
 
+
+export PYENV_ROOT="$HOME/.pyenv"
+command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
+eval "$(pyenv init -)"
+
 if ! command -v pyenv &> /dev/null ; then
   curl https://pyenv.run | bash
   echo 'export PYENV_ROOT="$HOME/.pyenv"' >> ~/.bashrc
@@ -111,6 +116,9 @@ if ! command -v pyenv &> /dev/null ; then
   echo 'command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.profile
   echo 'eval "$(pyenv init -)"' >> ~/.profile
 fi
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
 
 if ! command -v nvm &> /dev/null ; then
   # install nvm
