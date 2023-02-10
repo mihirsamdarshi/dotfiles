@@ -95,6 +95,7 @@ ln -sfv tmux/.tmux.conf ~/.tmux.conf
 ln -sfv tmux/.tmux.conf.local ~/.tmux.conf.local
 
 if [ "$IS_HEADLESS" -eq 0 ]; then
+  mkdir -p ~/.config/kitty
   ln -sfv kitty/tab_bar.py ~/.config/kitty/tab_bar.py
   ln -sfv kitty/kitty.conf ~/.config/kitty/kitty.conf
   ln -sfv .conkyrc ~/.conkyrc
