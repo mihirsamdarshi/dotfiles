@@ -139,8 +139,9 @@ corepack enable
 # install Python versions 3.8, 3.9, and 3.10 and set 3.10 to the global Python3 install
 pyenv install 3.8.11
 pyenv install 3.9.10
-pyenv install 3.10.4
-pyenv global 3.10.11
+pyenv install 3.10.10
+pyenv install 3.11.2
+pyenv global 3.10.10
 
 # Install Rust
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- --default-toolchain nightly --profile minimal -y
