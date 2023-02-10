@@ -98,7 +98,7 @@ fi
 
 # install Python versions 3.8, 3.9, and 3.10 and set 3.10 to the global Python3 install
 pyenv install -s 3.8.16
-pyenv install -s 3.9.10
+pyenv install -s 3.9.16
 pyenv install -s 3.10.10
 pyenv install -s 3.11.2
 pyenv global 3.10.10
@@ -107,6 +107,7 @@ pyenv global 3.10.10
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- --default-toolchain nightly --profile minimal -y
 
 rustup completions fish > ~/.config/fish/completions/rustup.fish
+mkdir -p ~/.zfunc
 rustup completions zsh > ~/.zfunc/_rustup
 # shellcheck source=/dev/null
 source "$HOME/.cargo/env"
