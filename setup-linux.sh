@@ -26,7 +26,7 @@ sudo add-apt-repository -y ppa:neovim-ppa/unstable
 sudo add-apt-repository -y ppa:fish-shell/release-3
 
 sudo apt-get install -y tmux fish neovim fzf curl wget jq bc findutils gawk \
-  software-properties-common lsb-release rsync
+  software-properties-common lsb-release rsync exa ripgrep
 
 # developer libraries
 sudo apt-get install -y python3-pip build-essential binutils libssl-dev \
@@ -152,7 +152,9 @@ rustup completions fish >~/.config/fish/completions/rustup.fish
 source "$HOME/.cargo/env"
 
 cargo install cargo-binstall
-cargo binstall cargo-expand flamegraph git-cliff tokio-console grcov cargo-edit
+cargo binstall cargo-expand flamegraph git-cliff tokio-console grcov cargo-edit cargo-watch cargo-update
+
+cargo binstall bat fd-find
 
 mkdir -p ~/.gitutils
 wget https://repo1.maven.org/maven2/com/madgag/bfg/1.14.0/bfg-1.14.0.jar -o ~/.gitutils/bfg.jar

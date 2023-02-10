@@ -113,7 +113,7 @@ rustup completions zsh > ~/.zfunc/_rustup
 source "$HOME/.cargo/env"
 
 cargo install cargo-binstall 
-cargo binstall cargo-expand flamegraph git-cliff tokio-console grcov cargo-edit
+cargo binstall cargo-expand flamegraph git-cliff tokio-console grcov cargo-edit cargo-watch cargo-update
 
 mkdir -p ~/.gitutils
 wget https://repo1.maven.org/maven2/com/madgag/bfg/1.14.0/bfg-1.14.0.jar -o ~/.gitutils/bfg.jar
