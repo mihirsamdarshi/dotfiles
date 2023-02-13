@@ -10,6 +10,7 @@ if status is-interactive
         end
     else if [ (uname -s) = "Linux" ]
         alias pbcopy='xclip -sel clip'
+        alias docker='podman'
     end
 
     starship init fish | source
