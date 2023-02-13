@@ -1,0 +1,139 @@
+diff --git a/config.lua b/config.lua
+index d7618e6..22b42f8 100644
+--- a/config.lua
++++ b/config.lua
+@@ -7,12 +7,12 @@
+ -- ADDING A PACKAGE
+ --
+ -- doom.use_package("EdenEast/nightfox.nvim", "sainnhe/sonokai")
+--- doom.use_package({
+---   "ur4ltz/surround.nvim",
+---   config = function()
+---     require("surround").setup({mappings_style = "sandwich"})
+---   end
+--- })
++doom.use_package({
++  "ur4ltz/surround.nvim",
++  config = function()
++    require("surround").setup({mappings_style = "sandwich"})
++  end
++})
+ 
+ -- ADDING A KEYBIND
+ --
+@@ -43,6 +43,9 @@
+ 
+ doom.indent = 2
+ doom.core.treesitter.settings.show_compiler_warning_message = false
+-doom.core.reloader.settings.reload_on_save = false
++doom.core.reloader.settings.reload_on_save = true
++
++local rust_settings = doom.langs.rust.settings
++rust_settings.disable_treesitter = true
+ 
+ -- vim: sw=2 sts=2 ts=2 expandtab
+diff --git a/lua/doom/modules/features/lsp/init.lua b/lua/doom/modules/features/lsp/init.lua
+index e2a2777..61af428 100644
+--- a/lua/doom/modules/features/lsp/init.lua
++++ b/lua/doom/modules/features/lsp/init.lua
+@@ -168,6 +168,7 @@ lsp.configs["nvim-lspconfig"] = function()
+   vim.diagnostic.config({
+     virtual_text = doom.features.lsp.settings.virtual_text,
+     severity_sort = doom.features.lsp.settings.severity_sort,
++    update_in_insert = true,
+     float = {
+       show_header = false,
+       border = "rounded",
+diff --git a/modules.lua b/modules.lua
+index e124db9..c4327bf 100644
+--- a/modules.lua
++++ b/modules.lua
+@@ -32,26 +32,26 @@ return {
+     "lsp_progress", -- Check status of LSP loading
+     "tabline", -- Tab bar buffer switcher
+     "dashboard", -- A pretty dashboard upon opening
+-    -- "trouble",         -- A pretty diagnostic viewer
++    "trouble",         -- A pretty diagnostic viewer
+     "statusline", -- A pretty status line at the bottom of the buffer
+-    -- "minimap",         -- Shows current position in document
+-    -- "terminal",        -- Integrated terminal in neovim
+-    -- "symbols",         -- Navigate between code symbols using telescope
++    "minimap",         -- Shows current position in document
++    "terminal",        -- Integrated terminal in neovim
++    "symbols",         -- Navigate between code symbols using telescope
+     -- "ranger",          -- File explorer in neovim (TODO: Test)
+     -- "restclient",      -- Test HTTP requests from neovim (TODO: Test)
+     -- "show_registers",  -- Show and navigate between registers
+ 
+     -- Tools
+-    -- "dap",             -- Debug code through neovim
++    "dap",             -- Debug code through neovim
+     "repl", -- Interactive REPL in neovim
+     "explorer", -- An enhanced filetree explorer
+     -- "firenvim",        -- Embed neovim in your browser
+     -- "lazygit",         -- Lazy git integration
+-    -- "neogit",          -- A git client for neovim
++    "neogit",          -- A git client for neovim
+     "neorg", -- Organise your life
+     "projects", -- Quickly switch between projects
+     -- "superman",        -- Read unix man pages in neovim
+-    -- "suda",            -- Save using sudo when necessary
++    "suda",            -- Save using sudo when necessary
+     "telescope", -- Fuzzy searcher to find files, grep code and more
+     "whichkey", -- An interactive sheet
+   },
+@@ -59,38 +59,38 @@ return {
+     -- Scripts
+     "lua",
+     "python",
+-    -- "bash",
+-    -- "fish",
++    "bash",
++    "fish",
+     -- "gdscript",
+     -- "gdscript",
+     -- "php",
+     -- "ruby",
+ 
+     -- Web
+-    -- "javascript",
+-    -- "typescript",
+-    -- "css",
++    "javascript",
++    "typescript",
++    "css",
+     -- "vue",
+-    -- "tailwindcss",
++    "tailwindcss",
+     -- "svelte",
+ 
+     -- Compiled
+-    -- "rust",
+-    -- "cc",
++    "rust",
++    "cc",
+     -- "ocaml",
+     -- "haskell",
+ 
+     -- JIT
+     -- "c_sharp",
+-    -- "kotlin",
+-    -- "java",
++    "kotlin",
++    "java",
+ 
+-    -- "json",
+-    -- "yaml",
+-    -- "toml",
+-    -- "markdown",
+-    -- "terraform",       -- Terraform / hcl files support
+-    -- "dockerfile",
++    "json",
++    "yaml",
++    "toml",
++    "markdown",
++    "terraform",       -- Terraform / hcl files support
++    "dockerfile",
+     -- "nix",             -- Nix declarations
+   },
+ }
