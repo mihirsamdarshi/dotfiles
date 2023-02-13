@@ -1,5 +1,5 @@
 diff --git a/config.lua b/config.lua
-index d7618e6..22b42f8 100644
+index 34f2144..22b42f8 100644
 --- a/config.lua
 +++ b/config.lua
 @@ -7,12 +7,12 @@
@@ -21,22 +21,23 @@ index d7618e6..22b42f8 100644
  
  -- ADDING A KEYBIND
  --
-@@ -43,6 +43,9 @@
+@@ -41,4 +41,11 @@
+ --   { "FileType", "javascript", function() print('This is a javascript file') end }
+ -- })
  
- doom.indent = 2
- doom.core.treesitter.settings.show_compiler_warning_message = false
--doom.core.reloader.settings.reload_on_save = false
++doom.indent = 2
++doom.core.treesitter.settings.show_compiler_warning_message = false
 +doom.core.reloader.settings.reload_on_save = true
 +
 +local rust_settings = doom.langs.rust.settings
 +rust_settings.disable_treesitter = true
- 
++
  -- vim: sw=2 sts=2 ts=2 expandtab
 diff --git a/lua/doom/modules/features/lsp/init.lua b/lua/doom/modules/features/lsp/init.lua
-index e2a2777..61af428 100644
+index 112f2b5..8193170 100644
 --- a/lua/doom/modules/features/lsp/init.lua
 +++ b/lua/doom/modules/features/lsp/init.lua
-@@ -168,6 +168,7 @@ lsp.configs["nvim-lspconfig"] = function()
+@@ -184,6 +184,7 @@ lsp.configs["nvim-lspconfig"] = function()
    vim.diagnostic.config({
      virtual_text = doom.features.lsp.settings.virtual_text,
      severity_sort = doom.features.lsp.settings.severity_sort,
@@ -45,10 +46,10 @@ index e2a2777..61af428 100644
        show_header = false,
        border = "rounded",
 diff --git a/modules.lua b/modules.lua
-index e124db9..c4327bf 100644
+index 04463a5..c4327bf 100644
 --- a/modules.lua
 +++ b/modules.lua
-@@ -32,26 +32,26 @@ return {
+@@ -32,65 +32,65 @@ return {
      "lsp_progress", -- Check status of LSP loading
      "tabline", -- Tab bar buffer switcher
      "dashboard", -- A pretty dashboard upon opening
@@ -82,12 +83,13 @@ index e124db9..c4327bf 100644
      "telescope", -- Fuzzy searcher to find files, grep code and more
      "whichkey", -- An interactive sheet
    },
-@@ -59,38 +59,38 @@ return {
+   langs = {
      -- Scripts
      "lua",
-     "python",
+-    -- "python",
 -    -- "bash",
 -    -- "fish",
++    "python",
 +    "bash",
 +    "fish",
      -- "gdscript",
