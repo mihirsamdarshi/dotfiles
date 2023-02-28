@@ -75,7 +75,7 @@ ${voffset 2}${color1}Uptime :$alignr${color3} $uptime
 #CPU
 #------------+
 ${voffset 10}${color1}${font :size=14:bold}CPU ${hr 2}${font}
-${voffset 5}${color1}Name : ${color3}$alignr${execi 6000 cat /proc/cpuinfo | grep 'model name' | sed -e 's/model name.*: //'| uniq | cut -c 1-16}
+${voffset 5}${color1}Name : ${color3}$alignr${execi 6000 cat /proc/cpuinfo | grep 'model name' | sed -e 's/model name.*: //'| uniq | cut -c 1-17}
 ${voffset 2}${color1}Freq : ${color3}${freq_g} GHz$alignr${color1}Usage : ${color3}${cpu}%
 #------------+
 #CPU CORES

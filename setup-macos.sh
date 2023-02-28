@@ -124,8 +124,11 @@ wget https://repo1.maven.org/maven2/com/madgag/bfg/1.14.0/bfg-1.14.0.jar -o ~/.g
 fish setup.fish
 
 # setup neovim
-curl -s https://raw.githubusercontent.com/doom-neovim/doom-nvim/main/tools/install.sh | sh
+curl -s https://raw.githubusercontent.com/doom-neovim/doom-nvim/main/tools/install.sh | bash
+cd ~/.config/nvim/ || echo "$HOME/.config/nvim/ folder not found" && exit 1
+git apply ~/.dotfiles/nvim/doom-nvim.patch
 
+# Download Google Cloud's database connectors
 mkdir -p ~/.gcloud/
 cd ~/.gcloud
 wget https://storage.googleapis.com/cloud-sql-java-connector/v1.6.3/postgres-socket-factory-1.6.3-jar-with-dependencies.jar

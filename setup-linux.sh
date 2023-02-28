@@ -21,7 +21,6 @@ esac
 
 sudo apt-get update
 sudo apt-get upgrade -y
-
 sudo add-apt-repository -y ppa:neovim-ppa/unstable
 sudo add-apt-repository -y ppa:fish-shell/release-3
 
@@ -54,9 +53,12 @@ echo \
   "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/devel_kubic_libcontainers_unstable.gpg]\
     https://download.opensuse.org/repositories/devel:kubic:libcontainers:unstable/xUbuntu_$(lsb_release -rs)/ /" |
   sudo tee /etc/apt/sources.list.d/devel:kubic:libcontainers:unstable.list >/dev/null
+# install the Azul repository
+curl -s https://repos.azul.com/azul-repo.key | sudo gpg --dearmor -o /usr/share/keyrings/azul.gpg
+echo "deb [arch=amd64 signed-by=/usr/share/keyrings/azul.gpg] https://repos.azul.com/zulu/deb stable main" | sudo tee /etc/apt/sources.list.d/zulu.list
 
 sudo apt-get update
-sudo apt-get install -y gh podman
+sudo apt-get install -y gh podman zulu17-jdk
 
 if [ "$IS_HEADLESS" -eq 0 ]; then
   sudo apt install -y font-manager tilix conky-all
@@ -152,9 +154,7 @@ rustup completions fish >~/.config/fish/completions/rustup.fish
 source "$HOME/.cargo/env"
 
 cargo install cargo-binstall
-cargo binstall cargo-expand flamegraph git-cliff tokio-console grcov cargo-edit cargo-watch cargo-update
-
-cargo binstall bat fd-find
+cargo binstall cargo-expand flamegraph git-cliff tokio-console grcov cargo-edit cargo-watch cargo-update zoxide bat fd-find
 
 mkdir -p ~/.gitutils
 wget https://repo1.maven.org/maven2/com/madgag/bfg/1.14.0/bfg-1.14.0.jar -o ~/.gitutils/bfg.jar
@@ -163,4 +163,6 @@ wget https://repo1.maven.org/maven2/com/madgag/bfg/1.14.0/bfg-1.14.0.jar -o ~/.g
 fish setup.fish
 
 # setup neovim
-curl -s https://raw.githubusercontent.com/doom-neovim/doom-nvim/main/tools/install.sh | sh
+curl -s https://raw.githubusercontent.com/doom-neovim/doom-nvim/main/tools/install.sh | bash
+cd ~/.config/nvim/ || echo "$HOME/.config/nvim/ folder not found" && exit 1
+git apply ~/.dotfiles/nvim/doom-nvim.patch

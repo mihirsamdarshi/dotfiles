@@ -11,6 +11,8 @@ if status is-interactive
     else if [ (uname -s) = "Linux" ]
         alias pbcopy='xclip -sel clip'
         alias docker='podman'
+
+        zoxide init fish | source
     end
 
     starship init fish | source
