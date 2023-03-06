@@ -8,8 +8,7 @@ if [ "$1" == "--headless" ]; then
 fi
 
 if [ "$IS_HEADLESS" -eq 0 ]; then
-  CONFIRM_MESSAGE="with a GUI"
-else
+  CONFIRM_MESSAGE="with a GUI" else
   CONFIRM_MESSAGE="headlessly"
 fi
 
@@ -23,9 +22,10 @@ sudo apt-get update
 sudo apt-get upgrade -y
 sudo add-apt-repository -y ppa:neovim-ppa/unstable
 sudo add-apt-repository -y ppa:fish-shell/release-3
+sudo add-apt-repository ppa:agornostal/ulauncher
 
 sudo apt-get install -y tmux fish neovim fzf curl wget jq bc findutils gawk \
-  software-properties-common lsb-release rsync exa ripgrep
+  software-properties-common lsb-release rsync exa ripgrep nvme-cli ulauncher
 
 # developer libraries
 sudo apt-get install -y python3-pip build-essential binutils libssl-dev \
@@ -34,7 +34,7 @@ sudo apt-get install -y python3-pip build-essential binutils libssl-dev \
   pkg-config p7zip-full parted util-linux zlib1g-dev libbz2-dev \
   libreadline-dev libsqlite3-dev libncursesw5-dev xz-utils tk-dev \
   libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev qemu-user-static \
-  linux-tools-common linux-tools-generic "linux-tools-$(uname -r)"
+  linux-tools-common linux-tools-generic
 # sensors
 sudo apt-get install -y lm-sensors neofetch htop
 
@@ -62,6 +62,8 @@ sudo apt-get install -y gh podman zulu17-jdk
 
 if [ "$IS_HEADLESS" -eq 0 ]; then
   sudo apt install -y font-manager tilix conky-all
+
+  sleep 20
   # add the VirtualBox repository
   sudo sh -c "echo 'deb [arch=amd64 signed-by=/usr/share/keyrings/oracle-virtualbox-2016.gpg] https://download.virtualbox.org/virtualbox/debian $(lsb_release -sc) contrib' >> /etc/apt/sources.list"
   wget -O- https://www.virtualbox.org/download/oracle_vbox_2016.asc | sudo gpg --dearmor --yes --output /usr/share/keyrings/oracle-virtualbox-2016.gpg
@@ -69,10 +71,13 @@ if [ "$IS_HEADLESS" -eq 0 ]; then
   sudo apt -get install -y virtualbox-7.0
 fi
 
+git config --global user.name "Mihir Samdarshi"
+git config --global user.email "mihirsamdarshi@users.noreply.github.com"
+
 # if the directory does not exist
 if [ ! -d .dotfiles ]; then
   # clone the dotfiles repo
-  git clone https://github.com/mihirsamdarshi/dotfiles .dotfiles
+  git clone git@github.com:mihirsamdarshi/dotfiles .dotfiles
 fi
 
 cd .dotfiles || exit 1
@@ -161,6 +166,10 @@ wget https://repo1.maven.org/maven2/com/madgag/bfg/1.14.0/bfg-1.14.0.jar -o ~/.g
 
 # install Oh My fish
 fish setup.fish
+
+# install kinto/xkeysnail for Mac Keyboard remapping 
+/bin/bash -c "$(wget -qO- https://raw.githubusercontent.com/rbreaves/kinto/HEAD/install/linux.sh)"
+echo "IMPORTANT: Remember to edit device list with the proper Logitech keyboard"
 
 # setup neovim
 curl -s https://raw.githubusercontent.com/doom-neovim/doom-nvim/main/tools/install.sh | bash
