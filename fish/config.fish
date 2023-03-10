@@ -6,15 +6,16 @@ if status is-interactive
         
         # connect home
         function wake_home
-            ssh pi "wakeonlan 58:11:22:bb:7d:4f"
+            tailscale up
+            ssh pi@100.95.76.91 "wakeonlan 58:11:22:bb:7d:4f"
         end
     else if [ (uname -s) = "Linux" ]
         alias pbcopy='xclip -sel clip'
         alias docker='podman'
 
-        zoxide init fish | source
     end
 
+    zoxide init fish | source
     starship init fish | source
 
     # Shorthand for venv creation
