@@ -53,6 +53,9 @@ cd ~ || exit 1
 # install files from Homebrew
 brew bundle
 
+git config --global user.name "Mihir Samdarshi"
+git config --global user.email "mihirsamdarshi@users.noreply.github.com"
+
 export NVM_DIR="$HOME/.nvm"
 # shellcheck source=/dev/null
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
