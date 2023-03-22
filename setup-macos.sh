@@ -1,7 +1,6 @@
 #!/bin/bash
 
 set -e
-
 if [[ $(xcode-select -p) == "" ]]; then
   # install Mac dev tools
   xcode-select --install
@@ -112,12 +111,12 @@ pyenv global 3.10.10
 
 # Install Rust
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- --default-toolchain nightly --profile minimal -y
+# shellcheck source=/dev/null
+source "$HOME/.cargo/env"
 
 rustup completions fish >~/.config/fish/completions/rustup.fish
 mkdir -p ~/.zfunc
 rustup completions zsh >~/.zfunc/_rustup
-# shellcheck source=/dev/null
-source "$HOME/.cargo/env"
 
 cargo install cargo-binstall
 cargo binstall cargo-expand flamegraph git-cliff tokio-console grcov cargo-edit cargo-watch cargo-update
