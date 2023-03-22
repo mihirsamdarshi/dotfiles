@@ -22,10 +22,12 @@ if [ ! -f ~/.zshrc ]; then
 fi
 
 # clone the dotfiles repo
-git clone https://github.com/mihirsamdarshi/dotfiles ~/.dotfiles && cd ~/.dotfiles || exit 1
+git clone https://github.com/mihirsamdarshi/dotfiles ~/.dotfiles || echo "Already cloned"
+
+cd ~/.dotfiles || echo ".dotfiles not cloned" && exit 1
 
 cp Brewfile ~/Brewfile
-rm ~/.gitignore
+rm -f ~/.gitignore
 cp .gitignore ~/.gitignore
 
 mkdir -p ~/.config/omf/
