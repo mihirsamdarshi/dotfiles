@@ -94,7 +94,7 @@ esac
 
 function wait_for_apt() {
 	while sudo fuser /var/{lib/{dpkg,apt/lists},cache/apt/archives}/lock >/dev/null 2>&1; do
-   		sleep 1
+		sleep 1
 	done
 }
 
@@ -185,25 +185,50 @@ rm -f ~/.gitignore
 mkdir -p ~/.config/omf/
 mkdir -p ~/.config/fish/completions
 
+function create_link() {
+	local original_file
+	local new_link
+
+	original_file=$1
+	new_link=$2
+
+	if [ -L "$new_link" ]; then
+		if [ -e "$new_link" ]; then
+			echo "$new_link already exists, doing nothing"
+		else
+			echo "$new_link is broken, unlinking and recreating"
+			unlink "$new_link"
+            ln -sfv "$original_file" "$new_link"
+		fi
+	elif [ -e "$new_link" ]; then
+		echo "$new_link is not a link, removing it and creating a symlink"
+		rm -rf "$new_link"
+        ln -sfv "$original_file" "$new_link"
+	else
+		echo "$new_link missing, linking to $original_file..."
+		ln -sfv "$original_file" "$new_link"
+	fi
+}
+
 # link all config files
-ln -sfv ~/.dotfiles/.gitignore ~/.gitignore
+create_link ~/.dotfiles/.gitignore ~/.gitignore
 # link fish config files
-ln -sfv ~/.dotfiles/fish/conf/config.fish ~/.config/fish/config.fish
-ln -sfv ~/.dotfiles/fish/functions ~/.config/fish/functions
-ln -sfv ~/.dotfiles/fish/conf.d ~/.config/fish/conf.d
-ln -sfv ~/.dotfiles/omf/bundle-linux ~/.config/omf/bundle
-ln -sfv ~/.dotfiles/omf/channel ~/.config/omf/channel
-ln -sfv ~/.dotfiles/omf/theme ~/.config/omf/theme
-ln -sfv ~/.dotfiles/starship.toml ~/.config/starship.toml
+create_link ~/.dotfiles/fish/conf/config.fish ~/.config/fish/config.fish
+create_link ~/.dotfiles/fish/functions ~/.config/fish/functions
+create_link ~/.dotfiles/fish/conf.d ~/.config/fish/conf.d
+create_link ~/.dotfiles/omf/bundle-linux ~/.config/omf/bundle
+create_link ~/.dotfiles/omf/channel ~/.config/omf/channel
+create_link ~/.dotfiles/omf/theme ~/.config/omf/theme
+create_link ~/.dotfiles/starship.toml ~/.config/starship.toml
 # link tmux config
-ln -sfv ~/.dotfiles/tmux/.tmux.conf ~/.tmux.conf
-ln -sfv ~/.dotfiles/tmux/.tmux.conf.local ~/.tmux.conf.local
+create_link ~/.dotfiles/tmux/.tmux.conf ~/.tmux.conf
+create_link ~/.dotfiles/tmux/.tmux.conf.local ~/.tmux.conf.local
 
 if [ "$IS_HEADLESS" -eq 0 ]; then
 	mkdir -p ~/.config/kitty
-	ln -sfv ~/.dotfiles/kitty/tab_bar.py ~/.config/kitty/tab_bar.py
-	ln -sfv ~/.dotfiles/kitty/kitty.conf ~/.config/kitty/kitty.conf
-	ln -sfv ~/.dotfiles/.conkyrc ~/.conkyrc
+	create_link ~/.dotfiles/kitty/tab_bar.py ~/.config/kitty/tab_bar.py
+	create_link ~/.dotfiles/kitty/kitty.conf ~/.config/kitty/kitty.conf
+	create_link ~/.dotfiles/.conkyrc ~/.conkyrc
 fi
 
 export PYENV_ROOT="$HOME/.pyenv"
