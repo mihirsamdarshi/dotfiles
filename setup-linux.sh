@@ -169,6 +169,14 @@ if [ "$IS_HEADLESS" == 0 ]; then
 	wait_for_apt
 
 	sudo apt-get install -y virtualbox-7.0
+  
+  # install google chrome
+	wget wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+	sudo apt install -y ./google-chrome-stable_current_amd64.deb
+	rm -rf ./google-chrome-stable_current_amd64.deb
+
+  wget https://download.jetbrains.com/toolbox/jetbrains-toolbox-1.27.3.14493.tar.gz -O jetbrains-toolbox.tar.gz
+  tar -tvf jetbrains-toolbox.tar.gz
 fi
 
 git config --global user.name "Mihir Samdarshi"
@@ -306,12 +314,17 @@ if [ "$IS_HEADLESS" == false ]; then
 	/bin/bash -c "$(wget -qO- https://raw.githubusercontent.com/rbreaves/kinto/HEAD/install/linux.sh)"
 	echo "IMPORTANT: Remember to edit device list with the proper Logitech keyboard"
 
+	mkdir -p ~/.local/share/fonts/NerdFonts/
+  wget https://github.com/ryanoasis/nerd-fonts/releases/download/v2.3.3/JetBrainsMono.zip	-O JetBrainsMono.zip
+  unzip ~/.local/share/fonts/NerdFonts/JetBrainsMono.zip
+  rm -rf JetBrainsMono.zip
+
 	# use ssh socket on GUI systems
 	if [ "$(systemctl is-active ssh.socket)" == "inactive" ]; then
 		sudo systemctl disable ssh
 		sudo systemctl stop ssh
 		sudo systemctl enable ssh.socket
-		sudo systemctl start ssh.socke
+		sudo systemctl start ssh.socket
 	fi
 	# set up no sleep service when SSH session is active
 	cat <<EOF >/etc/systemd/system/ssh-no-sleep@.service
@@ -323,7 +336,7 @@ BindsTo=ssh@%i.service
 ExecStart=/usr/bin/systemd-inhibit --mode block --what sleep --who "ssh session "%I --why "session still active" /usr/bin/sleep infinity
 
 [Install]
-WantedBy=ssh@.Service
+WantedBy=ssh@.service
 EOF
 
 	sudo systemctl enable ssh-no-sleep@
@@ -335,3 +348,4 @@ fi
 curl -s https://raw.githubusercontent.com/doom-neovim/doom-nvim/main/tools/install.sh | bash
 cd ~/.config/nvim/ || echo "$HOME/.config/nvim/ folder not found" && exit 1
 git apply ~/.dotfiles/nvim/doom-nvim.patch
+
