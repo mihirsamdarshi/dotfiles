@@ -1,7 +1,11 @@
 if status is-interactive
     if [ (uname -s) = "Darwin" ]
-        source /usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.fish.inc
-        
+        if [ (uname -m) = "arm64" ]
+            source /opt/homebrew/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.fish.inc
+        else
+            source /usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.fish.inc
+        end
+
         test -e {$HOME}/.iterm2_shell_integration.fish ; and source {$HOME}/.iterm2_shell_integration.fish
         
         # connect home
@@ -20,7 +24,6 @@ if status is-interactive
 
     # Shorthand for venv creation
     alias newvenv='python3 -m venv venv && source venv/bin/activate.fish && pip install --upgrade pip setuptools wheel'
-    
     function gscatjq -d "Pipe the output of `gsutil cat` to jq"
       set JSON_FILE $argv[1]
       gsutil cat "$JSON_FILE" | jq $argv[2..-1]

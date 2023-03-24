@@ -1,4 +1,3 @@
-package aws
 package bass
 package brew
 package foreign-env
@@ -9,7 +8,6 @@ package https://github.com/aliz-ai/google-cloud-sdk-fish-completion
 package https://github.com/halostatue/fish-docker
 package https://github.com/jorgebucaran/autopair.fish
 package nvm
-package osx
 package pyenv
 package rustup
 theme default
