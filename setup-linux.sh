@@ -158,7 +158,7 @@ wait_for_apt
 sudo apt-get install -y gh podman zulu17-jdk
 wait_for_apt
 
-if [ "$IS_HEADLESS" -eq 0 ]; then
+if [ "$IS_HEADLESS" == 0 ]; then
 	sudo apt-get install -y font-manager tilix conky-all
 	wait_for_apt
 
@@ -224,20 +224,20 @@ create_link ~/.dotfiles/starship.toml ~/.config/starship.toml
 create_link ~/.dotfiles/tmux/.tmux.conf ~/.tmux.conf
 create_link ~/.dotfiles/tmux/.tmux.conf.local ~/.tmux.conf.local
 
-if [ "$IS_HEADLESS" -eq 0 ]; then
+if [ "$IS_HEADLESS" == 0 ]; then
 	mkdir -p ~/.config/kitty
 	create_link ~/.dotfiles/kitty/tab_bar.py ~/.config/kitty/tab_bar.py
 	create_link ~/.dotfiles/kitty/kitty.conf ~/.config/kitty/kitty.conf
 	create_link ~/.dotfiles/.conkyrc ~/.conkyrc
 fi
 
-export PYENV_ROOT="$HOME/.pyenv"
-command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
-eval "$(pyenv init -)"
 
 if [ -d ~/.pyenv ]; then
 	rm -rf ~/.pyenv
 fi
+
+export PYENV_ROOT="$HOME/.pyenv"
+command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
 
 if ! command -v pyenv &>/dev/null; then
 	curl https://pyenv.run | bash
@@ -252,6 +252,8 @@ if ! command -v pyenv &>/dev/null; then
 		echo "eval \"\$(pyenv init -)\""
 	} >>~/.profile
 fi
+
+eval "$(pyenv init -)"
 
 export NVM_DIR="$HOME/.nvm"
 # shellcheck source=/dev/null
