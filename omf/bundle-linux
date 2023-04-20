@@ -1,11 +1,11 @@
 package bass
 package foreign-env
 package fuck
-package https://github.com/PatrickF1/colored_man_pages.fish
-package https://github.com/PatrickF1/fzf.fish
 package https://github.com/aliz-ai/google-cloud-sdk-fish-completion
 package https://github.com/halostatue/fish-docker
 package https://github.com/jorgebucaran/autopair.fish
+package https://github.com/PatrickF1/colored_man_pages.fish
+package https://github.com/PatrickF1/fzf.fish
 package nvm
 package pyenv
 package rustup
