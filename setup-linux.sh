@@ -81,9 +81,9 @@ if [ "$IS_HEADLESS" == 0 ]; then
 fi
 
 if [ "$IS_HEADLESS" == true ]; then
-	CONFIRM_MESSAGE="Setting up headless Debian-flavored install"
+	CONFIRM_MESSAGE="Setting up headless Ubuntu-flavored install"
 else
-	CONFIRM_MESSAGE="Setting up Debian-flavored install with a GUI"
+	CONFIRM_MESSAGE="Setting up Ubuntu-flavored install with a GUI"
 fi
 
 read -rp "${CONFIRM_MESSAGE}. $HOSTNAME_MESSAGE. $TAILSCALE_MESSAGE. Continue? (y/n): " ans_yn
@@ -106,11 +106,10 @@ wait_for_apt
 
 sudo add-apt-repository -y ppa:neovim-ppa/unstable
 sudo add-apt-repository -y ppa:fish-shell/release-3
-sudo add-apt-repository -y ppa:agornostal/ulauncher
 wait_for_apt
 
 sudo apt-get install -y tmux fish neovim fzf curl wget jq bc findutils gawk \
-	software-properties-common lsb-release rsync exa ripgrep nvme-cli ulauncher \
+	software-properties-common lsb-release rsync exa ripgrep nvme-cli \
 	openssh-server
 wait_for_apt
 
@@ -158,9 +157,9 @@ wait_for_apt
 sudo apt-get install -y gh podman zulu17-jdk
 wait_for_apt
 
-if [ "$IS_HEADLESS" == 0 ]; then
-	sudo apt-get install -y font-manager tilix conky-all
-	wait_for_apt
+if [ "$IS_HEADLESS" == false ]; then
+    sudo add-apt-repository -y ppa:agornostal/ulauncher
+    wait_for_apt
 
 	# add the VirtualBox repository
 	sudo sh -c "echo 'deb [arch=amd64 signed-by=/usr/share/keyrings/oracle-virtualbox-2016.gpg] https://download.virtualbox.org/virtualbox/debian $(lsb_release -sc) contrib' >> /etc/apt/sources.list"
@@ -168,7 +167,8 @@ if [ "$IS_HEADLESS" == 0 ]; then
 	sudo apt-get update
 	wait_for_apt
 
-	sudo apt-get install -y virtualbox-7.0
+	sudo apt-get install -y virtualbox-7.0 font-manager tilix conky-all
+	wait_for_apt
 fi
 
 git config --global user.name "Mihir Samdarshi"
@@ -224,7 +224,7 @@ create_link ~/.dotfiles/starship.toml ~/.config/starship.toml
 create_link ~/.dotfiles/tmux/.tmux.conf ~/.tmux.conf
 create_link ~/.dotfiles/tmux/.tmux.conf.local ~/.tmux.conf.local
 
-if [ "$IS_HEADLESS" == 0 ]; then
+if [ "$IS_HEADLESS" == false ]; then
 	mkdir -p ~/.config/kitty
 	create_link ~/.dotfiles/kitty/tab_bar.py ~/.config/kitty/tab_bar.py
 	create_link ~/.dotfiles/kitty/kitty.conf ~/.config/kitty/kitty.conf
@@ -288,13 +288,13 @@ source "$HOME/.cargo/env"
 rustup completions fish >~/.config/fish/completions/rustup.fish
 
 cargo install cargo-binstall
-cargo binstall cargo-expand flamegraph git-cliff tokio-console grcov cargo-edit cargo-watch cargo-update zoxide bat fd-find
+cargo binstall -y cargo-expand flamegraph git-cliff tokio-console grcov cargo-edit cargo-watch cargo-update zoxide bat fd-find
 
 mkdir -p ~/.gitutils
 wget https://repo1.maven.org/maven2/com/madgag/bfg/1.14.0/bfg-1.14.0.jar -O ~/.gitutils/bfg.jar
 
 # install Oh My fish
-fish setup.fish
+fish ~/.dotfiles/setup.fish
 
 # install tailscale
 if [ "$SETUP_TAILSCALE" == true ]; then
