@@ -185,7 +185,7 @@ git config --global user.email "mihirsamdarshi@users.noreply.github.com"
 # if the directory does not exist
 if [ ! -d .dotfiles ]; then
 	# clone the dotfiles repo
-	git clone git@github.com:mihirsamdarshi/dotfiles .dotfiles
+	git clone https://github.com/mihirsamdarshi/dotfiles .dotfiles
 fi
 
 rm -f ~/.gitignore
