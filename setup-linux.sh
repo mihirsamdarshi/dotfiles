@@ -3,7 +3,9 @@ set -e
 
 IS_HEADLESS=0
 HOSTNAME=0
-SETUP_TAILSCALE=false
+SETUP_PYTHON=0
+SETUP_DEVPKGS=0
+SETUP_TAILSCALE=0
 
 optspec=":hnt-:"
 while getopts "$optspec" optchar; do
@@ -28,6 +30,12 @@ while getopts "$optspec" optchar; do
 		tailscale)
 			SETUP_TAILSCALE=true
 			;;
+		python)
+			SETUP_PYTHON=true
+			;;
+		devpkgs)
+			SETUP_DEVPKGS=true
+			;;
 		*)
 			if [ "$OPTERR" = 1 ] && [ "${optspec:0:1}" != ":" ]; then
 				echo "Unknown option --${OPTARG}" >&2
@@ -45,6 +53,12 @@ while getopts "$optspec" optchar; do
 	t)
 		SETUP_TAILSCALE=true
 		;;
+	p)
+		SETUP_PYTHON=true
+		;;
+	d)
+		SETUP_DEVPKGS=true
+		;;
 	\?)
 		echo "Invalid option -$OPTARG" >&2
 		exit 1
@@ -59,11 +73,79 @@ else
 	HOSTNAME_MESSAGE="Setting hostname to $HOSTNAME"
 fi
 
-if [ $SETUP_TAILSCALE == true ]; then
+echo "$HOSTNAME_MESSAGE"
+
+if [ "$SETUP_TAILSCALE" == 0 ]; then
+	while [ "$SETUP_TAILSCALE" == 0 ]; do
+		read -rp "Do you want to set up tailscale?: " ans_yn
+		case "$ans_yn" in
+		[Yy] | [Yy][Ee][Ss])
+			SETUP_TAILSCALE=true
+			;;
+		[Nn])
+			SETUP_TAILSCALE=false
+			;;
+		*)
+			echo "only y/n accepted"
+			;;
+		esac
+	done
+fi
+
+if [ "$SETUP_TAILSCALE" == true ]; then
 	TAILSCALE_MESSAGE="Setting up tailscale"
 else
 	TAILSCALE_MESSAGE="Not setting up tailscale"
 fi
+echo "$TAILSCALE_MESSAGE"
+
+if [ "$SETUP_PYTHON" == 0 ]; then
+	while [ "$SETUP_PYTHON" == 0 ]; do
+		read -rp "Do you want to install pyenv/Python?: " ans_yn
+		case "$ans_yn" in
+		[Yy] | [Yy][Ee][Ss])
+			SETUP_PYTHON=true
+			;;
+		[Nn])
+			SETUP_PYTHON=false
+			;;
+		*)
+			echo "only y/n accepted"
+			;;
+		esac
+	done
+fi
+
+if [ "$SETUP_PYTHON" == true ]; then
+	PYTHON_MESSAGE="Installing Python 3.9-3.11"
+else
+	PYTHON_MESSAGE="Not installing Python"
+fi
+echo "$PYTHON_MESSAGE"
+
+if [ "$SETUP_DEVPKGS" == 0 ]; then
+	while [ "$SETUP_DEVPKGS" == 0 ]; do
+		read -rp "Do you want to set up various development packages and tools?: " ans_yn
+		case "$ans_yn" in
+		[Yy] | [Yy][Ee][Ss])
+			SETUP_DEVPKGS=true
+			;;
+		[Nn])
+			SETUP_DEVPKGS=false
+			;;
+		*)
+			echo "only y/n accepted"
+			;;
+		esac
+	done
+fi
+
+if [ $SETUP_DEVPKGS == true ]; then
+	DEVPKG_MESSAGE="Installing various dev packages"
+else
+	DEVPKG_MESSAGE="Not installing dev packages (including build-essential)"
+fi
+echo "$DEVPKG_MESSAGE"
 
 if [ "$IS_HEADLESS" == 0 ]; then
 	while [ "$IS_HEADLESS" == 0 ]; do
@@ -86,7 +168,7 @@ else
 	CONFIRM_MESSAGE="Setting up Ubuntu-flavored install with a GUI"
 fi
 
-read -rp "${CONFIRM_MESSAGE}. $HOSTNAME_MESSAGE. $TAILSCALE_MESSAGE. Continue? (y/n): " ans_yn
+read -rp "${CONFIRM_MESSAGE}. $HOSTNAME_MESSAGE. $TAILSCALE_MESSAGE. $DEVPKG_MESSAGE. $PYTHON_MESSAGE. Continue? (y/n): " ans_yn
 case "$ans_yn" in
 [Yy] | [Yy][Ee][Ss]) echo "Setting up ${CONFIRM_MESSAGE}" ;;
 *) exit 1 ;;
@@ -110,18 +192,25 @@ wait_for_apt
 
 sudo apt-get install -y tmux fish neovim fzf curl wget jq bc findutils gawk \
 	software-properties-common lsb-release rsync exa ripgrep nvme-cli \
-	openssh-server
+	openssh-server build-essential
 wait_for_apt
 
-# developer libraries
-sudo apt-get install -y python3-pip build-essential binutils libssl-dev \
-	libwebkit2gtk-4.0-dev libgtk-3-dev libayatana-appindicator3-dev \
-	librsvg2-dev libcairo2-dev libgdk-pixbuf-2.0-dev libdbus-1-dev \
-	pkg-config p7zip-full parted util-linux zlib1g-dev libbz2-dev \
-	libreadline-dev libsqlite3-dev libncursesw5-dev xz-utils tk-dev \
-	libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev qemu-user-static \
-	linux-tools-common linux-tools-generic
-wait_for_apt
+if [ "$SETUP_PYTHON" == true ]; then
+	sudo apt install libssl-dev zlib1g-dev libbz2-dev libreadline-dev \
+		libsqlite3-dev curl libncursesw5-dev xz-utils tk-dev libxml2-dev \
+		libxmlsec1-dev libffi-dev liblzma-dev python3-pip
+	wait_for_apt
+fi
+
+if [ "$SETUP_DEVPKGS" == true ]; then
+	# developer libraries
+	sudo apt-get install -y libwebkit2gtk-4.0-dev libgtk-3-dev \
+		libayatana-appindicator3-dev librsvg2-dev libcairo2-dev \
+		libgdk-pixbuf-2.0-dev libdbus-1-dev pkg-config p7zip-full parted \
+		util-linux zlib1g-dev qemu-user-static linux-tools-common \
+		linux-tools-generic
+	wait_for_apt
+fi
 
 # sensors
 sudo apt-get install -y lm-sensors neofetch htop
@@ -158,8 +247,8 @@ sudo apt-get install -y gh podman zulu17-jdk
 wait_for_apt
 
 if [ "$IS_HEADLESS" == false ]; then
-    sudo add-apt-repository -y ppa:agornostal/ulauncher
-    wait_for_apt
+	sudo add-apt-repository -y ppa:agornostal/ulauncher
+	wait_for_apt
 
 	# add the VirtualBox repository
 	sudo sh -c "echo 'deb [arch=amd64 signed-by=/usr/share/keyrings/oracle-virtualbox-2016.gpg] https://download.virtualbox.org/virtualbox/debian $(lsb_release -sc) contrib' >> /etc/apt/sources.list"
@@ -169,14 +258,14 @@ if [ "$IS_HEADLESS" == false ]; then
 
 	sudo apt-get install -y virtualbox-7.0 font-manager tilix conky-all
 	wait_for_apt
-  
-    # install google chrome
-    wget wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-    sudo apt install -y ./google-chrome-stable_current_amd64.deb
-    rm -rf ./google-chrome-stable_current_amd64.deb
 
-    wget https://download.jetbrains.com/toolbox/jetbrains-toolbox-1.27.3.14493.tar.gz -O jetbrains-toolbox.tar.gz
-    tar -tvf jetbrains-toolbox.tar.gz
+	# install google chrome
+	wget wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+	sudo apt install -y ./google-chrome-stable_current_amd64.deb
+	rm -rf ./google-chrome-stable_current_amd64.deb
+
+	wget https://download.jetbrains.com/toolbox/jetbrains-toolbox-1.27.3.14493.tar.gz -O jetbrains-toolbox.tar.gz
+	tar -tvf jetbrains-toolbox.tar.gz
 fi
 
 git config --global user.name "Mihir Samdarshi"
@@ -206,12 +295,12 @@ function create_link() {
 		else
 			echo "$new_link is broken, unlinking and recreating"
 			unlink "$new_link"
-            ln -sfv "$original_file" "$new_link"
+			ln -sfv "$original_file" "$new_link"
 		fi
 	elif [ -e "$new_link" ]; then
 		echo "$new_link is not a link, removing it and creating a symlink"
 		rm -rf "$new_link"
-        ln -sfv "$original_file" "$new_link"
+		ln -sfv "$original_file" "$new_link"
 	else
 		echo "$new_link missing, linking to $original_file..."
 		ln -sfv "$original_file" "$new_link"
@@ -239,29 +328,36 @@ if [ "$IS_HEADLESS" == false ]; then
 	create_link ~/.dotfiles/.conkyrc ~/.conkyrc
 fi
 
+if [ "$SETUP_PYTHON" == true ]; then
+	if [ -d ~/.pyenv ]; then
+		rm -rf ~/.pyenv
+	fi
 
-if [ -d ~/.pyenv ]; then
-	rm -rf ~/.pyenv
+	export PYENV_ROOT="$HOME/.pyenv"
+	command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
+
+	if ! command -v pyenv &>/dev/null; then
+		curl https://pyenv.run | bash
+		{
+			echo "export PYENV_ROOT=\"\$HOME/.pyenv\""
+			echo "command -v pyenv >/dev/null || export PATH=\"\$PYENV_ROOT/bin:\$PATH\""
+			echo "eval \"\$(pyenv init -)\""
+		} >>~/.bashrc
+		{
+			echo "export PYENV_ROOT=\"\$HOME/.pyenv\""
+			echo "command -v pyenv >/dev/null || export PATH=\"\$PYENV_ROOT/bin:\$PATH\""
+			echo "eval \"\$(pyenv init -)\""
+		} >>~/.profile
+	fi
+
+	eval "$(pyenv init -)"
+
+	# install Python versions 3.8, 3.9, and 3.10 and set 3.10 to the global Python3 install
+	pyenv install -s 3.9.16
+	pyenv install -s 3.10.10
+	pyenv install -s 3.11.2
+	pyenv global 3.11.2
 fi
-
-export PYENV_ROOT="$HOME/.pyenv"
-command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
-
-if ! command -v pyenv &>/dev/null; then
-	curl https://pyenv.run | bash
-	{
-		echo "export PYENV_ROOT=\"\$HOME/.pyenv\""
-		echo "command -v pyenv >/dev/null || export PATH=\"\$PYENV_ROOT/bin:\$PATH\""
-		echo "eval \"\$(pyenv init -)\""
-	} >>~/.bashrc
-	{
-		echo "export PYENV_ROOT=\"\$HOME/.pyenv\""
-		echo "command -v pyenv >/dev/null || export PATH=\"\$PYENV_ROOT/bin:\$PATH\""
-		echo "eval \"\$(pyenv init -)\""
-	} >>~/.profile
-fi
-
-eval "$(pyenv init -)"
 
 export NVM_DIR="$HOME/.nvm"
 # shellcheck source=/dev/null
@@ -280,13 +376,7 @@ nvm install --lts
 nvm use --lts
 # install yarn
 corepack enable
-
-# install Python versions 3.8, 3.9, and 3.10 and set 3.10 to the global Python3 install
-pyenv install -s 3.8.16
-pyenv install -s 3.9.16
-pyenv install -s 3.10.10
-pyenv install -s 3.11.2
-pyenv global 3.10.10
+npm install -g --upgrade npm tree-sitter tree-sitter-cli
 
 # Install Rust
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- --default-toolchain nightly --profile minimal -y
@@ -296,10 +386,15 @@ source "$HOME/.cargo/env"
 rustup completions fish >~/.config/fish/completions/rustup.fish
 
 cargo install cargo-binstall
-cargo binstall -y cargo-expand flamegraph git-cliff tokio-console grcov cargo-edit cargo-watch cargo-update zoxide bat fd-find
+cargo binstall -y zoxide bat fd-find
 
-mkdir -p ~/.gitutils
-wget https://repo1.maven.org/maven2/com/madgag/bfg/1.14.0/bfg-1.14.0.jar -O ~/.gitutils/bfg.jar
+# install rust dev tools
+if [ "$SETUP_DEVPKGS" == true ]; then
+	cargo binstall -y cargo-expand flamegraph git-cliff tokio-console grcov cargo-edit cargo-watch cargo-update
+
+	mkdir -p ~/.gitutils
+	wget https://repo1.maven.org/maven2/com/madgag/bfg/1.14.0/bfg-1.14.0.jar -O ~/.gitutils/bfg.jar
+fi
 
 # install Oh My fish
 fish ~/.dotfiles/setup.fish
@@ -315,9 +410,9 @@ if [ "$IS_HEADLESS" == false ]; then
 	echo "IMPORTANT: Remember to edit device list with the proper Logitech keyboard"
 
 	mkdir -p ~/.local/share/fonts/NerdFonts/
-  wget https://github.com/ryanoasis/nerd-fonts/releases/download/v2.3.3/JetBrainsMono.zip	-O JetBrainsMono.zip
-  unzip ~/.local/share/fonts/NerdFonts/JetBrainsMono.zip
-  rm -rf JetBrainsMono.zip
+	wget https://github.com/ryanoasis/nerd-fonts/releases/download/v2.3.3/JetBrainsMono.zip -O JetBrainsMono.zip
+	unzip ~/.local/share/fonts/NerdFonts/JetBrainsMono.zip
+	rm -rf JetBrainsMono.zip
 
 	# use ssh socket on GUI systems
 	if [ "$(systemctl is-active ssh.socket)" == "inactive" ]; then
@@ -348,4 +443,3 @@ fi
 curl -s https://raw.githubusercontent.com/doom-neovim/doom-nvim/main/tools/install.sh | bash
 cd ~/.config/nvim/ || echo "$HOME/.config/nvim/ folder not found" && exit 1
 git apply ~/.dotfiles/nvim/doom-nvim.patch
-
