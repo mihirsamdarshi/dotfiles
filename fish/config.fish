@@ -15,11 +15,18 @@ if status is-interactive
         end
     else if [ (uname -s) = "Linux" ]
         alias pbcopy='xclip -sel clip'
+        
+        function podman -d "Podman is an open source container, pod, and container image management engine"
+          if [ $argv[1] = "compose" ]
+            podman-compose $argv[2..-1]
+          else
+            /usr/bin/podman $argv[1..-1]
+          end
+        end
+        
         alias docker='podman'
-
     end
 
-    zoxide init fish | source
     starship init fish | source
 
     # Shorthand for venv creation

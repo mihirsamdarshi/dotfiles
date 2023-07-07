@@ -98,14 +98,6 @@ style = "#4e5252"
 home_symbol = "\uf015 ~"
 read_only = " \uf83d"
 
-[git_status]
-format = '([\[$all_status$ahead_behind\]]($style) )'
-untracked = '[?\($untracked\)](red)'
-staged = '[+\($count\)](green)'
-ahead = "⇡${count}"
-diverged = "⇕⇡${ahead_count}⇣${behind_count}"
-behind = "⇣${count}"
-
 [aws]
 disabled = true
 symbol = "\ue7ad  "
@@ -131,9 +123,18 @@ symbol = "\ue62d "
 [elm]
 symbol = "\ue62c "
 
+[git_metrics]
+disabled = false
+
+[git_status]
+ahead = '⇡${count}'
+diverged = '⇕⇡${ahead_count}⇣${behind_count}'
+behind = '⇣${count}'
+
 [gcloud]
 symbol = "️\ue7b2 "
 format = 'on [$symbol($project)]($style) '
+
 [gcloud.project_aliases]
 motrpac-portal-dev = "dev"
 motrpac-portal = "prod"
@@ -155,6 +156,12 @@ symbol = "\ue256 "
 
 [julia]
 symbol = "\ue624 "
+
+[kubernetes]
+format = 'on [⛵ $context \($namespace\)](dimmed green) '
+disabled = false
+[kubernetes.context_aliases]
+'default' = 'homelab'
 
 [memory_usage]
 symbol = "\uf85a "
