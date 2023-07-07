@@ -440,6 +440,5 @@ EOF
 fi
 
 # setup neovim
-curl -s https://raw.githubusercontent.com/doom-neovim/doom-nvim/main/tools/install.sh | bash
-cd ~/.config/nvim/ || echo "$HOME/.config/nvim/ folder not found" && exit 1
-git apply ~/.dotfiles/nvim/doom-nvim.patch
+git clone https://github.com/NvChad/NvChad ~/.config/nvim --depth 1
+
