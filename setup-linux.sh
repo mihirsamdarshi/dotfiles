@@ -196,7 +196,7 @@ sudo apt-get install -y tmux fish neovim fzf curl wget jq bc findutils gawk \
 wait_for_apt
 
 if [ "$SETUP_PYTHON" == true ]; then
-	sudo apt install libssl-dev zlib1g-dev libbz2-dev libreadline-dev \
+	sudo apt install -y libssl-dev zlib1g-dev libbz2-dev libreadline-dev \
 		libsqlite3-dev curl libncursesw5-dev xz-utils tk-dev libxml2-dev \
 		libxmlsec1-dev libffi-dev liblzma-dev python3-pip
 	wait_for_apt
@@ -260,7 +260,7 @@ if [ "$IS_HEADLESS" == false ]; then
 	wait_for_apt
 
 	# install google chrome
-	wget wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+	wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
 	sudo apt install -y ./google-chrome-stable_current_amd64.deb
 	rm -rf ./google-chrome-stable_current_amd64.deb
 
@@ -411,7 +411,7 @@ if [ "$IS_HEADLESS" == false ]; then
 
 	mkdir -p ~/.local/share/fonts/NerdFonts/
 	wget https://github.com/ryanoasis/nerd-fonts/releases/download/v2.3.3/JetBrainsMono.zip -O JetBrainsMono.zip
-	unzip ~/.local/share/fonts/NerdFonts/JetBrainsMono.zip
+	unzip JetBrainsMono.zip -d ~/.local/share/fonts/NerdFonts/JetBrainsMono.zip
 	rm -rf JetBrainsMono.zip
 
 	# use ssh socket on GUI systems
