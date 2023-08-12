@@ -191,7 +191,7 @@ sudo add-apt-repository -y ppa:fish-shell/release-3
 wait_for_apt
 
 sudo apt-get install -y tmux fish neovim fzf curl wget jq bc findutils gawk \
-	software-properties-common lsb-release rsync exa ripgrep nvme-cli \
+	software-properties-common lsb-release rsync ripgrep nvme-cli \
 	openssh-server build-essential
 wait_for_apt
 
@@ -386,7 +386,7 @@ source "$HOME/.cargo/env"
 rustup completions fish >~/.config/fish/completions/rustup.fish
 
 cargo install cargo-binstall
-cargo binstall -y zoxide bat fd-find
+cargo binstall -y zoxide bat fd-find exa
 
 # install rust dev tools
 if [ "$SETUP_DEVPKGS" == true ]; then
