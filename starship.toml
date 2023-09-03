@@ -159,6 +159,7 @@ symbol = "\ue624 "
 
 [kubernetes]
 format = 'on [⛵ $context \($namespace\)](dimmed green) '
+detect_folders = ["kubernetes", "cluster"]
 disabled = false
 [kubernetes.context_aliases]
 'default' = 'homelab'

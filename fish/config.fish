@@ -47,7 +47,6 @@ if status is-interactive
 
       jq --color-output "$JQ_ARGS" "$JSON_FILE" | less --RAW-CONTROL-CHARS
     end
-
 end
 
 pyenv init - | source
