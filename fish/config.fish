@@ -27,7 +27,7 @@ if status is-interactive
         alias docker='podman'
     end
 
-    starship init fish | source
+    set GOPATH $HOME/.go
 
     # Shorthand for venv creation
     alias newvenv='python3 -m venv venv && source venv/bin/activate.fish && pip install --upgrade pip setuptools wheel'
@@ -49,4 +49,3 @@ if status is-interactive
     end
 end
 
-pyenv init - | source
