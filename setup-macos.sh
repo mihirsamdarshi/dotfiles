@@ -1,9 +1,11 @@
 #!/bin/bash
 
-set -e
+set -ex
+
 if [[ $(xcode-select -p) == "" ]]; then
   # install Mac dev tools
   xcode-select --install
+  sleep 600
 fi
 
 if [ ! -d ~/.oh-my-zsh ]; then
@@ -20,10 +22,12 @@ if [ ! -f ~/.zshrc ]; then
   rm -rf ~/.zshrc
 fi
 
-# clone the dotfiles repo
-git clone https://github.com/mihirsamdarshi/dotfiles ~/.dotfiles || echo "Already cloned"
+if [ ! -d ~/.dotfiles ]; then 
+  # clone the dotfiles repo
+  git clone https://github.com/mihirsamdarshi/dotfiles ~/.dotfiles || echo "Already cloned"
+fi
 
-cd ~/.dotfiles || echo ".dotfiles not cloned" && exit 1
+cd ~/.dotfiles || (echo ".dotfiles not cloned" && exit 1)
 
 cp Brewfile ~/Brewfile
 rm -f ~/.gitignore
