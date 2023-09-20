@@ -119,7 +119,11 @@ mkdir -p ~/.zfunc
 rustup completions zsh >~/.zfunc/_rustup
 
 cargo install cargo-binstall
-cargo binstall cargo-expand flamegraph git-cliff tokio-console grcov cargo-edit cargo-watch cargo-update
+cargo binstall \
+  action-validator cargo-about cargo-bloat cargo-bump cargo-deny \
+  cargo-edit cargo-expand cargo-outdated cargo-release cargo-show-asm \
+  cargo-udeps cargo-unused-features cargo-update cargo-watch cbindgen \
+  erdtree flamegraph git-cliff grcov mozwire ouch tokio-console zoxide 
 
 mkdir -p ~/.gitutils
 wget https://repo1.maven.org/maven2/com/madgag/bfg/1.14.0/bfg-1.14.0.jar -o ~/.gitutils/bfg.jar

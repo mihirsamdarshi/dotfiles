@@ -7,7 +7,6 @@ package https://github.com/aliz-ai/google-cloud-sdk-fish-completion
 package https://github.com/halostatue/fish-docker
 package https://github.com/jorgebucaran/autopair.fish
 package https://github.com/kidonng/zoxide.fish
-package nvm
 package pyenv
 package rustup
 theme default
