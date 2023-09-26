@@ -1,2 +1,3 @@
-starship init fish | source
-
+if [ (uname -s) = "Darwin" ]
+  starship init fish | source
+end
