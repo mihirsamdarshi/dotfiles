@@ -29,8 +29,6 @@ if status is-interactive
 
     set GOPATH $HOME/.go
 
-    # Shorthand for venv creation
-    alias newvenv='python3 -m venv venv && source venv/bin/activate.fish && pip install --upgrade pip setuptools wheel'
     function gscatjq -d "Pipe the output of `gsutil cat` to jq"
       set JSON_FILE $argv[1]
       gsutil cat "$JSON_FILE" | jq $argv[2..-1]
