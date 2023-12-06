@@ -396,9 +396,6 @@ if [ "$SETUP_DEVPKGS" == true ]; then
 	wget https://repo1.maven.org/maven2/com/madgag/bfg/1.14.0/bfg-1.14.0.jar -O ~/.gitutils/bfg.jar
 fi
 
-# install Oh My fish
-fish ~/.dotfiles/setup.fish
-
 # install tailscale
 if [ "$SETUP_TAILSCALE" == true ]; then
 	curl -fsSL https://tailscale.com/install.sh | sh
