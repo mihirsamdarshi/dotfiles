@@ -321,13 +321,6 @@ create_link ~/.dotfiles/starship.toml ~/.config/starship.toml
 create_link ~/.dotfiles/tmux/.tmux.conf ~/.tmux.conf
 create_link ~/.dotfiles/tmux/.tmux.conf.local ~/.tmux.conf.local
 
-if [ "$IS_HEADLESS" == false ]; then
-	mkdir -p ~/.config/kitty
-	create_link ~/.dotfiles/kitty/tab_bar.py ~/.config/kitty/tab_bar.py
-	create_link ~/.dotfiles/kitty/kitty.conf ~/.config/kitty/kitty.conf
-	create_link ~/.dotfiles/.conkyrc ~/.conkyrc
-fi
-
 if [ "$SETUP_PYTHON" == true ]; then
 	if [ -d ~/.pyenv ]; then
 		rm -rf ~/.pyenv
