@@ -279,7 +279,6 @@ fi
 
 rm -f ~/.gitignore
 
-mkdir -p ~/.config/omf/
 mkdir -p ~/.config/fish/completions
 
 function create_link() {
@@ -313,9 +312,6 @@ create_link ~/.dotfiles/.gitignore ~/.gitignore
 create_link ~/.dotfiles/fish/conf/config.fish ~/.config/fish/config.fish
 create_link ~/.dotfiles/fish/functions ~/.config/fish/functions
 create_link ~/.dotfiles/fish/conf.d ~/.config/fish/conf.d
-create_link ~/.dotfiles/omf/bundle-linux ~/.config/omf/bundle
-create_link ~/.dotfiles/omf/channel ~/.config/omf/channel
-create_link ~/.dotfiles/omf/theme ~/.config/omf/theme
 create_link ~/.dotfiles/starship.toml ~/.config/starship.toml
 # link tmux config
 create_link ~/.dotfiles/tmux/.tmux.conf ~/.tmux.conf

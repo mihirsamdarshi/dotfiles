@@ -33,7 +33,6 @@ cp Brewfile ~/Brewfile
 rm -f ~/.gitignore
 cp .gitignore ~/.gitignore
 
-mkdir -p ~/.config/omf/
 mkdir -p ~/.config/fish/completions
 
 # link all config files
@@ -41,9 +40,6 @@ mkdir -p ~/.config/fish/completions
 ln -sfv ~/.dotfiles/fish/conf/config.fish ~/.config/fish/config.fish
 ln -sfv ~/.dotfiles/fish/functions ~/.config/fish/functions
 ln -sfv ~/.dotfiles/fish/conf.d ~/.config/fish/conf.d
-ln -sfv ~/.dotfiles/omf/bundle-linux ~/.config/omf/bundle
-ln -sfv ~/.dotfiles/omf/channel ~/.config/omf/channel
-ln -sfv ~/.dotfiles/omf/theme ~/.config/omf/theme
 ln -sfv ~/.dotfiles/starship.toml ~/.config/starship.toml
 # link tmux config
 ln -sfv ~/.dotfiles/tmux/.tmux.conf ~/.tmux.conf
