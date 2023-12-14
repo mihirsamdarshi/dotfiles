@@ -1,0 +1,89 @@
+#!/usr/bin/env python3
+"""
+Modified script inspired by artginzburg/sudo-touchid
+"""
+import argparse
+import getpass
+import re
+import shutil
+import sys
+from pathlib import Path
+
+LIBRARY_NAME = "pam_tid.so"
+SUDO_FILE = "/etc/pam.d/sudo"
+SUDO_BACKUP_FILE = f"{SUDO_FILE}.bak"
+NEW_PAM_LINE = f"auth       sufficient     {LIBRARY_NAME}\n"
+PAM_WTID_RE = re.compile(rf'^auth\s+sufficient\s+{LIBRARY_NAME}$', flags=re.MULTILINE)
+
+
+def get_args() -> argparse.Namespace:
+    """Return the parsed args."""
+    parser = argparse.ArgumentParser(description="Toggle pam_tid.so")
+    parser.add_argument("--disable", action="store_true")
+    return parser.parse_args()
+
+
+def enable_pam_tid(path: Path) -> None:
+    """Enable pam_tid.so"""
+    with path.open("r") as f:
+        data = f.read()
+
+    if PAM_WTID_RE.search(data):
+        print(f"{LIBRARY_NAME} is already enabled")
+        return
+
+    data = NEW_PAM_LINE + data
+
+    with path.open("w") as f:
+        f.write(data)
+
+    print(f"{LIBRARY_NAME} enabled successfully.")
+
+
+def disable_pam_tid(path: Path) -> None:
+    """Disable pam_tid.so"""
+
+    with path.open("r") as f:
+        data = f.read()
+
+    if PAM_WTID_RE.search(data) is None:
+        print(f"{LIBRARY_NAME} seems to be already disabled")
+        return
+
+    data = PAM_WTID_RE.sub("", data)
+    data = data.strip() + "\n"
+
+    with path.open("w") as f:
+        f.write(data)
+
+    print(f"{LIBRARY_NAME} has been disabled.")
+
+
+def wait_for_user():
+    print("\nPress RETURN to continue or any other key to abort")
+    c = getpass.getpass("")
+    if c not in ["\r", "\n"]:
+        sys.exit(1)
+
+
+def main():
+    args = get_args()
+
+    shutil.copy(SUDO_FILE, SUDO_BACKUP_FILE)
+
+    try:
+        path = Path(SUDO_FILE)
+        if args.disable:
+            disable_pam_tid(path)
+        else:
+            enable_pam_tid(path)
+
+        print(f"Created a backup at {SUDO_BACKUP_FILE}")
+    except OSError as e:
+        print(e)
+        shutil.copy(SUDO_BACKUP_FILE, SUDO_FILE)
+        exit(1)
+
+
+if __name__ == "__main__":
+    main()

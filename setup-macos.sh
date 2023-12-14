@@ -28,6 +28,7 @@ if [ ! -d ~/.dotfiles ]; then
 fi
 
 cd ~/.dotfiles || (echo ".dotfiles not cloned" && exit 1)
+git submodule update --init --recursive
 
 cp Brewfile ~/Brewfile
 rm -f ~/.gitignore
@@ -141,3 +142,5 @@ wget https://storage.googleapis.com/cloud-sql-java-connector/v1.6.3/postgres-soc
 wget https://storage.googleapis.com/cloud-sql-java-connector/v1.6.3/postgres-socket-factory-1.6.3-jar-with-driver-and-dependencies.jar
 wget https://storage.googleapis.com/cloud-sql-java-connector/v1.6.3/mysql-socket-factory-1.6.3-jar-with-dependencies.jar
 wget https://storage.googleapis.com/cloud-sql-java-connector/v1.6.3/mysql-socket-factory-1.6.3-jar-with-driver-and-dependencies.jar
+
+echo "Don't forget to run \`sudo bash ~/.dotfiles/tid/install.sh\` to install pam_wtid.so and enable TouchID"
