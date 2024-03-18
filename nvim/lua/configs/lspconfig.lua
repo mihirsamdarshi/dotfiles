@@ -1,4 +1,4 @@
--- EXAMPLE 
+-- EXAMPLE
 local on_attach = require("nvchad.configs.lspconfig").on_attach
 local on_init = require("nvchad.configs.lspconfig").on_init
 local capabilities = require("nvchad.configs.lspconfig").capabilities
@@ -13,9 +13,12 @@ local servers = {
       python = {
         analysis = {
           autoSearchPaths = true,
-        }
-      }
-    }
+        },
+      },
+    },
+  },
+  sourcekit = {
+    root_dir = lspconfig.util.root_pattern(".git", "Package.swift", "compile_commands.json"),
   },
   bashls = {},
   docker_compose_language_service = {},
