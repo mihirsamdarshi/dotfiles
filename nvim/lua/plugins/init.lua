@@ -32,6 +32,7 @@ return {
         "cmake-language-server",
         "docker-compose-language-service",
         "dockerfile-language-server",
+        "efm",
         "fixjson",
         "gradle-language-server",
         "hclfmt",
@@ -107,4 +108,21 @@ return {
       require("crates").setup()
     end,
   },
+
+  {
+    "lambdalisue/suda.vim",
+    cmd = { "SudaWrite", "SudaRead" },
+  },
+
+  -- {
+  --   "kevinhwang91/nvim-ufo",
+  --   config = function()
+  --     require("ufo").setup {
+  --       provider_selector = function(bufnr, filetype, buftype)
+  --         return { "treesitter", "indent" }
+  --       end,
+  --     }
+  --   end,
+  --   requires = "kevinhwang91/promise-async",
+  -- },
 }

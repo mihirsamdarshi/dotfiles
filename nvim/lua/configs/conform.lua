@@ -7,6 +7,7 @@ local options = {
     sh = { "shellcheck", "shfmt" },
     rust = { "rustfmt" },
     r = { "styler" },
+    rmd = { "styler" },
   },
 
   format_on_save = {
