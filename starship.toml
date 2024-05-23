@@ -161,8 +161,6 @@ symbol = "\ue624 "
 format = 'on [⛵ $context \($namespace\)](dimmed green) '
 detect_folders = ["kubernetes", "cluster"]
 disabled = false
-[kubernetes.context_aliases]
-'default' = 'homelab'
 
 [memory_usage]
 symbol = "\uf85a "
