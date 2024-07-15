@@ -6,8 +6,6 @@ Some of the stuff I use that this configuration contains:
 
 - Brewfile
 - Fish Shell
-  - Oh My Fish
-  - Starship.rs
 - Neovim
 - Zsh & Oh My Zsh
 
