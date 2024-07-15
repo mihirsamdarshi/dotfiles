@@ -1,5 +1,5 @@
 return {
-  {
+{
     "stevearc/conform.nvim",
     event = "BufWritePre", -- uncomment for format on save
     config = function()
@@ -89,6 +89,22 @@ return {
         "gitignore",
       },
     },
+  },
+  
+  {
+    "zbirenbaum/copilot.lua",
+    cmd = "Copilot",
+    event = "InsertEnter",
+    config = function()
+      require("copilot").setup({
+        panel = {
+          auto_refresh = true,
+        },
+        suggestion = {
+          auto_trigger = true,
+        },
+      })
+    end,
   },
 
   {
