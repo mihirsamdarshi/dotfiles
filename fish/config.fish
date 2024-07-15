@@ -7,12 +7,6 @@ if status is-interactive
         end
 
         test -e {$HOME}/.iterm2_shell_integration.fish ; and source {$HOME}/.iterm2_shell_integration.fish
-        
-        # connect home
-        function wake_home
-            tailscale up
-            ssh pi@100.95.76.91 "wakeonlan 58:11:22:bb:7d:4f"
-        end
     else if [ (uname -s) = "Linux" ]
         alias pbcopy='xclip -sel clip'
         
