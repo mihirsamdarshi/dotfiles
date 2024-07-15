@@ -5,7 +5,7 @@ function newvenv -d "Shorthand for creating a new virtualenv"
   if set -q _flag_directory
     set venv_dir "$_flag_directory"
   else
-    set venv_dir "venv"
+    set venv_dir ".venv"
   end
 
   python3 -m venv $venv_dir
