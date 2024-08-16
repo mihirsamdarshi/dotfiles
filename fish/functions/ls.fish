@@ -1,4 +1,3 @@
-function ls --wraps=exa --wraps='exa --long --git --icons --group-directories-first' --description 'alias ls exa --long --git --icons --group-directories-first'
-  exa --long --git --icons --group-directories-first $argv
-        
+function ls --wraps=eza --wraps='exa --long --git --icons --group-directories-first' --description 'alias ls eza --long --git --icons --group-directories-first'
+  eza --long --git --icons --group-directories-first $argv
 end
