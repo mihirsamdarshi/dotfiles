@@ -26,6 +26,7 @@ local servers = {
   yamlls = {},
   ruff_lsp = {},
   r_language_server = {},
+  terraformls = {},
 }
 
 -- lsps with default config
