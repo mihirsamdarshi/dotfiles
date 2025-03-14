@@ -22,7 +22,7 @@ if [ ! -f ~/.zshrc ]; then
   rm -rf ~/.zshrc
 fi
 
-if [ ! -d ~/.dotfiles ]; then 
+if [ ! -d ~/.dotfiles ]; then
   # clone the dotfiles repo
   git clone https://github.com/mihirsamdarshi/dotfiles ~/.dotfiles || echo "Already cloned"
 fi
@@ -124,23 +124,10 @@ cargo binstall \
   action-validator cargo-about cargo-bloat cargo-bump cargo-deny \
   cargo-edit cargo-expand cargo-outdated cargo-release cargo-show-asm \
   cargo-udeps cargo-unused-features cargo-update cargo-watch cbindgen \
-  erdtree flamegraph git-cliff grcov mozwire ouch tokio-console zoxide 
+  erdtree flamegraph git-cliff grcov mozwire ouch tokio-console zoxide
 
 mkdir -p ~/.gitutils
 wget https://repo1.maven.org/maven2/com/madgag/bfg/1.14.0/bfg-1.14.0.jar -o ~/.gitutils/bfg.jar
 
 # install Oh My fish
 fish setup.fish
-
-# setup neovim
-git clone https://github.com/NvChad/NvChad ~/.config/nvim --depth 1
-
-# Download Google Cloud's database connectors
-mkdir -p ~/.gcloud/
-cd ~/.gcloud
-wget https://storage.googleapis.com/cloud-sql-java-connector/v1.6.3/postgres-socket-factory-1.6.3-jar-with-dependencies.jar
-wget https://storage.googleapis.com/cloud-sql-java-connector/v1.6.3/postgres-socket-factory-1.6.3-jar-with-driver-and-dependencies.jar
-wget https://storage.googleapis.com/cloud-sql-java-connector/v1.6.3/mysql-socket-factory-1.6.3-jar-with-dependencies.jar
-wget https://storage.googleapis.com/cloud-sql-java-connector/v1.6.3/mysql-socket-factory-1.6.3-jar-with-driver-and-dependencies.jar
-
-echo "Don't forget to run \`sudo bash ~/.dotfiles/tid/install.sh\` to install pam_wtid.so and enable TouchID"
