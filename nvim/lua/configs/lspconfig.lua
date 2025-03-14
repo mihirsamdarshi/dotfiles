@@ -24,7 +24,8 @@ local servers = {
   docker_compose_language_service = {},
   dockerls = {},
   yamlls = {},
-  ruff_lsp = {},
+  ts_ls = {},
+  ruff = {},
   r_language_server = {},
   terraformls = {},
 }
@@ -41,10 +42,3 @@ for lsp, opts in pairs(servers) do
     capabilities = capabilities,
   }
 end
-
--- typescript
-lspconfig.tsserver.setup {
-  on_attach = on_attach,
-  on_init = on_init,
-  capabilities = capabilities,
-}

@@ -1,5 +1,11 @@
 return {
   {
+    "folke/which-key.nvim",
+    config = function()
+      require "configs.which-key"
+    end,
+  },
+  {
     "stevearc/conform.nvim",
     event = "BufWritePre", -- uncomment for format on save
     config = function()
@@ -42,14 +48,12 @@ return {
         "pyright",
         "r-languageserver",
         "ruff",
-        "ruff-lsp",
         "rust-analyzer",
         "shellcheck",
         "shellharden",
         "taplo",
         "terraform-ls",
         "tflint",
-        "typescript-language-server",
         "yaml-language-server",
       },
     },
