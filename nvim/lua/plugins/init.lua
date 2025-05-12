@@ -101,12 +101,19 @@ return {
     config = function()
       require("copilot").setup {
         panel = {
-          auto_refresh = true,
+          enabled = false,
         },
         suggestion = {
-          auto_trigger = true,
+          enabled = false,
         },
       }
+    end,
+  },
+
+  {
+    "zbirenbaum/copilot-cmp",
+    config = function()
+      require("copilot_cmp").setup()
     end,
   },
 
