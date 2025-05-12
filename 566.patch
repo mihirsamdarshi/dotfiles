@@ -1,0 +1,33 @@
+From 2c0c026432ada80c238f36ed34cf34d2dfa8c989 Mon Sep 17 00:00:00 2001
+From: Nick Nungester <nnungest@gmail.com>
+Date: Wed, 5 Mar 2025 23:22:36 -0500
+Subject: [PATCH] fix: ensure dirs arent empty strings
+
+This fixes issue 564 also safely wraps strings for parsing
+
+[564]
+---
+ functions/_tide_parent_dirs.fish | 14 +++++++++-----
+ 1 file changed, 9 insertions(+), 5 deletions(-)
+
+diff --git a/functions/_tide_parent_dirs.fish b/functions/_tide_parent_dirs.fish
+index 9f31b043..5eefdc4e 100644
+--- a/functions/_tide_parent_dirs.fish
++++ b/functions/_tide_parent_dirs.fish
+@@ -1,7 +1,11 @@
+ function _tide_parent_dirs --on-variable PWD
+-    set -g _tide_parent_dirs (string escape (
+-        for dir in (string split / -- $PWD)
+-            set -la parts $dir
+-            string join / -- $parts
+-        end))
++    set -g _tide_parent_dirs (
++        string escape (
++            for dir in (string split / -- $PWD)
++                if test (string length \"$dir\") -lt 1
++                    continue
++                end
++                set -a parts $dir
++                string join "" (string join / --  $parts) ""
++            end))
+ end
