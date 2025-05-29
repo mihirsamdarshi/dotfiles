@@ -1,4 +1,8 @@
 nvim.fish
+fisher*.fish
 tide*.fish
 fzf*.fish
 _*.fish
+fish/conf.d/fzf.fish
+fish/conf.d/autopair.fish
+
