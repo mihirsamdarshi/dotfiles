@@ -1,4 +1,4 @@
 nvim.fish
-fish/tide*.fish
-fish/fzf*.fish
-fish/_*.fish
+tide*.fish
+fzf*.fish
+_*.fish
