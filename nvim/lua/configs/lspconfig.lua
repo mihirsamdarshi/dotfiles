@@ -1,9 +1,8 @@
 -- EXAMPLE
-local on_attach = require("nvchad.configs.lspconfig").on_attach
-local on_init = require("nvchad.configs.lspconfig").on_init
-local capabilities = require("nvchad.configs.lspconfig").capabilities
+require("nvchad.configs.lspconfig").defaults()
 
 local lspconfig = require "lspconfig"
+
 local servers = {
   html = {},
   cssls = {},
@@ -23,22 +22,17 @@ local servers = {
   bashls = {},
   docker_compose_language_service = {},
   dockerls = {},
+  gh_actions_ls = {},
   yamlls = {},
   ts_ls = {},
   ruff = {},
   r_language_server = {},
   terraformls = {},
+  ty = {},
 }
 
 -- lsps with default config
-for lsp, opts in pairs(servers) do
-  opts.on_init = on_init
-  opts.on_attach = on_attach
-  opts.capabilities = capabilities
-
-  lspconfig[lsp].setup {
-    on_attach = on_attach,
-    on_init = on_init,
-    capabilities = capabilities,
-  }
+for name, opts in pairs(servers) do
+  vim.lsp.enable(name) -- nvim v0.11.0 or above required
+  vim.lsp.config(name, opts) -- nvim v0.11.0 or above required
 end

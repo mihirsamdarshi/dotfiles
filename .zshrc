@@ -79,7 +79,11 @@ fpath+=~/.zfunc
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git poetry zsh-autosuggestions docker zsh-syntax-highlighting zsh-completions zsh-history-substring-search nvm pyenv python yarn virtualenv copyzshell)
+plugins=(git eza zsh-autosuggestions docker macos zsh-syntax-highlighting zsh-completions pyenv python virtualenv)
+
+# See zsh-completions README for why to do this
+fpath+=${ZSH_CUSTOM:-${ZSH:-~/.oh-my-zsh}/custom}/plugins/zsh-completions/src
+autoload -U compinit && compinit
 
 source $ZSH/oh-my-zsh.sh
 
@@ -92,7 +96,7 @@ source $ZSH/oh-my-zsh.sh
 
 # Preferred editor for local and remote sessions
 if [[ -n $SSH_CONNECTION ]]; then
-  export EDITOR='nano'
+  export EDITOR='vi'
 else
   export EDITOR='nvim'
 fi
@@ -114,33 +118,25 @@ export GPG_TTY=$(tty)
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
-# Start Pyenv
-eval "$(pyenv init -)"
-
-# Start nvm
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
-
-# Load gcloud CLI completions
-source "/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.zsh.inc"
-source "/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc"
-export CLOUDSDK_PYTHON_SITEPACKAGES=1
+export PYENV_ROOT="$HOME/.pyenv"
+[[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
+eval "$(pyenv init - zsh)"
 
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
 
-export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
-
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+source <(fzf --zsh)
 
 # Shorthand for venv creation
 alias newvenv='python3 -m venv venv && source venv/bin/activate && pip install --upgrade pip setuptools wheel'
-# replace ls with exa
-alias ls=exa
-# shorthand for piping gsutil cat to jq
-alias gscatjq=gsutilcatpipetojq
 
-function gsutilcatpipetojq() {
-  JSON_FILE="$1"
-  shift
-  gsutil cat "$JSON_FILE" | jq "$@"
-}
+# uv
+export PATH="/Users/msamdarshi/.local/bin:$PATH"
+eval "$(uv generate-shell-completion zsh)"
+
+# pnpm
+export PNPM_HOME="/Users/msamdarshi/Library/pnpm"
+case ":$PATH:" in
+  *":$PNPM_HOME:"*) ;;
+  *) export PATH="$PNPM_HOME:$PATH" ;;
+esac
+# pnpm end

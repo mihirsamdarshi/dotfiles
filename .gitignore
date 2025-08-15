@@ -2,7 +2,11 @@ nvim.fish
 fisher*.fish
 tide*.fish
 fzf*.fish
-_*.fish
+puffer_*.fish
+**/_*.fish
+**/_*.py
 fish/conf.d/fzf.fish
 fish/conf.d/autopair.fish
+fish/functions/fish_*.fish
+.DS_Store
 
