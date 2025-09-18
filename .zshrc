@@ -114,13 +114,6 @@ export GPG_TTY=$(tty)
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
-# Start Pyenv
-eval "$(pyenv init -)"
-
-# Start nvm
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
-
 # Load gcloud CLI completions
 source "/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.zsh.inc"
 source "/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc"
@@ -128,12 +121,10 @@ export CLOUDSDK_PYTHON_SITEPACKAGES=1
 
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
 
-export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
-
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 # Shorthand for venv creation
-alias newvenv='python3 -m venv venv && source venv/bin/activate && pip install --upgrade pip setuptools wheel'
+alias newvenv='uv venv && source venv/bin/activate'
 # replace ls with exa
 alias ls=exa
 # shorthand for piping gsutil cat to jq

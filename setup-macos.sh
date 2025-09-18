@@ -74,42 +74,6 @@ if [ ! -f ~/.zshrc ]; then
   rm -f ~/.zshrc
 fi
 
-# install the latest version of Node
-nvm install --lts
-nvm use --lts
-# install yarn
-corepack enable
-
-# add the pyenv stuff to the bashrc and profile
-export PYENV_ROOT="$HOME/.pyenv"
-command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
-eval "$(pyenv init -)"
-
-if ! command -v pyenv &>/dev/null; then
-  {
-    echo "export PYENV_ROOT=\"\$HOME/.pyenv\""
-    echo "command -v pyenv >/dev/null || export PATH=\"\$PYENV_ROOT/bin:\$PATH\""
-    echo "eval \"\$(pyenv init -)\""
-  } >>~/.bashrc
-  {
-    echo "export PYENV_ROOT=\"\$HOME/.pyenv\""
-    echo "command -v pyenv >/dev/null || export PATH=\"\$PYENV_ROOT/bin:\$PATH\""
-    echo "eval \"\$(pyenv init -)\""
-  } >>~/.zshrc
-  {
-    echo "export PYENV_ROOT=\"\$HOME/.pyenv\""
-    echo "command -v pyenv >/dev/null || export PATH=\"\$PYENV_ROOT/bin:\$PATH\""
-    echo "eval \"\$(pyenv init -)\""
-  } >>~/.profile
-fi
-
-# install Python versions 3.8, 3.9, and 3.10 and set 3.10 to the global Python3 install
-pyenv install -s 3.8.16
-pyenv install -s 3.9.16
-pyenv install -s 3.10.10
-pyenv install -s 3.11.2
-pyenv global 3.10.10
-
 # Install Rust
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- --default-toolchain nightly --profile minimal -y
 # shellcheck source=/dev/null
