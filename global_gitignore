@@ -1,0 +1,7 @@
+# macOS files
+.DS_Store
+# IDE folders
+.idea
+.vscode
+.fleet
+
