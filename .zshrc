@@ -79,7 +79,7 @@ fpath+=~/.zfunc
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git eza zsh-autosuggestions docker macos zsh-syntax-highlighting zsh-completions pyenv python virtualenv)
+plugins=(git eza fzf zsh-autosuggestions docker macos aws zsh-syntax-highlighting zsh-completions python virtualenv)
 
 # See zsh-completions README for why to do this
 fpath+=${ZSH_CUSTOM:-${ZSH:-~/.oh-my-zsh}/custom}/plugins/zsh-completions/src
@@ -151,3 +151,4 @@ case ":$PATH:" in
   *) export PATH="$PNPM_HOME:$PATH" ;;
 esac
 # pnpm end
+
