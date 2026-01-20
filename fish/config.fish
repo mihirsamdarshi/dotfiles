@@ -22,3 +22,10 @@ set GOPATH $HOME/.go
 # This won't be added again if you remove it.
 source ~/.orbstack/shell/init.fish 2>/dev/null || :
 
+# uv
+fish_add_path "/Users/msamdarshi/.local/bin"
+
+# Added by LM Studio CLI (lms)
+set -gx PATH $PATH /Users/msamdarshi/.lmstudio/bin
+# End of LM Studio CLI section
+#
