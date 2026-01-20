@@ -4,9 +4,16 @@ require("nvchad.configs.lspconfig").defaults()
 local lspconfig = require "lspconfig"
 
 local servers = {
+  -- Web Dev
   html = {},
   cssls = {},
-  rust_analyzer = {},
+  ts_ls = {},
+  eslint = {},
+  tailwindcss = {},
+  -- Serde/config
+  jsonls = {},
+  yamlls = {},
+  -- Python
   pyright = {
     settings = {
       python = {
@@ -16,19 +23,29 @@ local servers = {
       },
     },
   },
+  ruff = {},
+  ty = {},
+  -- Rust/C
+  rust_analyzer = {},
   sourcekit = {
     root_dir = lspconfig.util.root_pattern(".git", "Package.swift", "compile_commands.json"),
   },
+  -- Scripting
   bashls = {},
+  just = {},
+  -- Analysis
+  sqruff = {},
+  r_language_server = {},
+  -- Infra
+  terraformls = {},
   docker_compose_language_service = {},
   dockerls = {},
   gh_actions_ls = {},
-  yamlls = {},
-  ts_ls = {},
-  ruff = {},
-  r_language_server = {},
-  terraformls = {},
-  ty = {},
+  -- Other
+  marksman = {},
+  stylua = {},
+  lua_ls = {},
+  home_assistant = {},
 }
 
 -- lsps with default config
