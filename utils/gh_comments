@@ -1,0 +1,174 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# inspired by https://github.com/cli/cli/issues/5788#issuecomment-3491834672
+
+usage() {
+    cat <<'EOF'
+Get GitHub PR review comments
+
+Usage:
+  gh_comments [--no-bots] [--reviewer USER] [--repo OWNER/REPO] [--pr NUMBER]
+
+Options:
+  --no-bots         Exclude bot comments
+  --reviewer USER   Filter comments by GitHub username
+  --repo OWNER/REPO Repository to query
+  --pr NUMBER       Pull request number
+  -h, --help        Show this help
+
+Examples:
+  gh_comments
+  gh_comments --no-bots
+  gh_comments --reviewer copilot
+  gh_comments --reviewer johndoe --repo facebook/react --pr 12345
+EOF
+}
+
+err() {
+    echo "Error: $*" >&2
+    exit 1
+}
+
+require_cmd() {
+    command -v "$1" >/dev/null 2>&1 || err "Required command not found: $1"
+}
+
+main() {
+    require_cmd gh
+    require_cmd jq
+
+    local no_bots=false
+    local reviewer=""
+    local repo=""
+    local pr_number=""
+
+    while [[ $# -gt 0 ]]; do
+        case "$1" in
+            --no-bots)
+                no_bots=true
+                shift
+                ;;
+            --reviewer)
+                [[ $# -ge 2 ]] || err "--reviewer requires a value"
+                reviewer="$2"
+                shift 2
+                ;;
+            --repo)
+                [[ $# -ge 2 ]] || err "--repo requires a value"
+                repo="$2"
+                shift 2
+                ;;
+            --pr)
+                [[ $# -ge 2 ]] || err "--pr requires a value"
+                pr_number="$2"
+                shift 2
+                ;;
+            -h|--help)
+                usage
+                exit 0
+                ;;
+            *)
+                err "Unknown argument: $1
+
+$(usage)"
+                ;;
+        esac
+    done
+
+    if [[ -z "$repo" ]]; then
+        echo "No repo specified, detecting from current directory..."
+        repo="$(gh repo view --json nameWithOwner -q .nameWithOwner 2>/dev/null || true)"
+        [[ -n "$repo" ]] || err "Could not detect repository. Please specify --repo OWNER/REPO"
+        echo "Detected repo: $repo"
+    fi
+
+    if [[ -z "$pr_number" ]]; then
+        echo "No PR number specified, detecting from current branch..."
+        pr_number="$(gh pr view --json number -q .number 2>/dev/null || true)"
+        [[ -n "$pr_number" ]] || err "Could not detect PR number. Please specify --pr NUMBER"
+        echo "Detected PR #$pr_number"
+    fi
+
+    if [[ "$no_bots" == true ]]; then
+        echo "Filtering: humans only (no bots)"
+    else
+        echo "Filtering: including bots"
+    fi
+
+    if [[ -n "$reviewer" ]]; then
+        echo "Filtering comments by reviewer: $reviewer"
+    else
+        echo "No reviewer filter specified, showing all comments"
+    fi
+
+    local jq_filter
+    if [[ "$no_bots" == true ]]; then
+        if [[ -n "$reviewer" ]]; then
+            jq_filter='[
+              .[]
+              | select(.user.type == "User" and .user.login == $user)
+              | {
+                  user: .user.login,
+                  path,
+                  line,
+                  start_line,
+                  commit_id,
+                  diff_hunk,
+                  body
+                }
+            ]'
+        else
+            jq_filter='[
+              .[]
+              | select(.user.type == "User")
+              | {
+                  user: .user.login,
+                  path,
+                  line,
+                  start_line,
+                  commit_id,
+                  diff_hunk,
+                  body
+                }
+            ]'
+        fi
+    else
+        if [[ -n "$reviewer" ]]; then
+            jq_filter='[
+              .[]
+              | select(.user.login == $user)
+              | {
+                  user: .user.login,
+                  path,
+                  line,
+                  start_line,
+                  commit_id,
+                  diff_hunk,
+                  body
+                }
+            ]'
+        else
+            jq_filter='[
+              .[]
+              | {
+                  user: .user.login,
+                  path,
+                  line,
+                  start_line,
+                  commit_id,
+                  diff_hunk,
+                  body
+                }
+            ]'
+        fi
+    fi
+
+    if [[ -n "$reviewer" ]]; then
+        gh api "repos/$repo/pulls/$pr_number/comments" | jq --arg user "$reviewer" "$jq_filter"
+    else
+        gh api "repos/$repo/pulls/$pr_number/comments" | jq "$jq_filter"
+    fi
+}
+
+main "$@"
