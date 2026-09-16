@@ -1,0 +1,4 @@
+#!/bin/bash
+
+xclip -i -sel c -f | xclip -i -sel p
+
