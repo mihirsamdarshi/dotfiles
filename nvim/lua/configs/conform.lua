@@ -4,16 +4,21 @@ local options = {
     css = { "prettier" },
     html = { "prettier" },
     python = { "ruff_fix", "ruff_format" },
-    sh = { "shellcheck", "shfmt" },
+    sh = { "shfmt" },
     rust = { "rustfmt" },
     r = { "styler" },
     rmd = { "styler" },
+    c = { "clang_format" },
+    cpp = { "clang_format" },
+    proto = { "buf" },
+    kotlin = { "ktlint" },
+    hcl = { "hcl" }, -- runs hclfmt
   },
 
   format_on_save = {
     -- These options will be passed to conform.format()
     timeout_ms = 500,
-    lsp_fallback = true,
+    lsp_format = "fallback",
   },
 }
 

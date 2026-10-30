@@ -24,7 +24,14 @@ local servers = {
     },
   },
   ruff = {},
-  ty = {},
+  -- type-checking only; pyright handles navigation/hover/completion
+  ty = {
+    settings = {
+      ty = {
+        disableLanguageServices = true,
+      },
+    },
+  },
   -- Rust/C
   rust_analyzer = {},
   sourcekit = {
@@ -41,15 +48,17 @@ local servers = {
   docker_compose_language_service = {},
   dockerls = {},
   gh_actions_ls = {},
+  -- Build
+  cmake = {},
+  gradle_ls = {},
   -- Other
   marksman = {},
-  stylua = {},
   lua_ls = {},
   home_assistant = {},
 }
 
 -- lsps with default config
 for name, opts in pairs(servers) do
-  vim.lsp.enable(name) -- nvim v0.11.0 or above required
   vim.lsp.config(name, opts) -- nvim v0.11.0 or above required
+  vim.lsp.enable(name) -- nvim v0.11.0 or above required
 end

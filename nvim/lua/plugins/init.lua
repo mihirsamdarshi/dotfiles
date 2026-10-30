@@ -28,7 +28,7 @@ return {
   },
 
   {
-    "williamboman/mason.nvim",
+    "mason-org/mason.nvim",
     opts = {
       ensure_installed = {
         "lua-language-server",
@@ -37,15 +37,11 @@ return {
         "css-lsp",
         "prettier",
         "bash-language-server",
-        "beautysh",
-        "biome",
         "buf",
         "clang-format",
         "cmake-language-server",
         "docker-compose-language-service",
         "dockerfile-language-server",
-        "efm",
-        "fixjson",
         "gradle-language-server",
         "hclfmt",
         "json-lsp",
@@ -56,11 +52,20 @@ return {
         "ruff",
         "rust-analyzer",
         "shellcheck",
-        "shellharden",
+        "shfmt",
         "taplo",
         "terraform-ls",
         "tflint",
         "yaml-language-server",
+        -- enabled in configs/lspconfig.lua
+        "typescript-language-server",
+        "eslint-lsp",
+        "tailwindcss-language-server",
+        "ty",
+        "just-lsp",
+        "sqruff",
+        "gh-actions-language-server",
+        "vscode-home-assistant", -- provides the `home_assistant` LSP binary
       },
     },
   },
@@ -85,8 +90,11 @@ return {
         "yaml",
         "tsv",
         "xml",
-        "yaml",
         "c",
+        "cpp",
+        "cmake",
+        "proto",
+        "hcl",
         "bash",
         "fish",
         "kotlin",
@@ -110,16 +118,18 @@ return {
           enabled = false,
         },
         suggestion = {
-          enabled = false,
+          enabled = true,
+          auto_trigger = true, -- show ghost text as you type
+          keymap = {
+            accept = "<C-l>", -- avoids clashing with NvChad's <Tab> cmp/luasnip mapping
+            accept_word = "<C-;>",
+            accept_line = "<C-j>",
+            next = "<M-]>",
+            prev = "<M-[>", -- NOT <C-[>: that is the same byte as <Esc> and would hijack escape
+            dismiss = "<C-h>",
+          },
         },
       }
-    end,
-  },
-
-  {
-    "zbirenbaum/copilot-cmp",
-    config = function()
-      require("copilot_cmp").setup()
     end,
   },
 
@@ -147,20 +157,10 @@ return {
   },
 
   {
-    "ibhagwan/fzf-lua",
-    -- optional for icon support
-    dependencies = { "nvim-tree/nvim-web-devicons" },
-    -- or if using mini.icons/mini.nvim
-    -- dependencies = { "echasnovski/mini.icons" },
-    opts = {},
-    config = function()
-      require("fzf-lua").setup()
-    end,
-  },
-
-  {
     "kevinhwang91/nvim-ufo",
     config = function()
+      vim.keymap.set("n", "zR", require("ufo").openAllFolds, { desc = "Open all folds" })
+      vim.keymap.set("n", "zM", require("ufo").closeAllFolds, { desc = "Close all folds" })
       require("ufo").setup {
         provider_selector = function(bufnr, filetype, buftype)
           return { "lsp", "treesitter" }
