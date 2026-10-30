@@ -332,10 +332,10 @@ tmux_conf_copy_to_os_clipboard=false
 # this is the place to override or undo settings
 
 # increase history size
-#set -g history-limit 10000
+set -g history-limit 100000
 
 # start with mouse mode enabled
-#set -g mouse on
+set -g mouse on
 
 # force Vi mode
 #   really you should export VISUAL or EDITOR environment variable, see manual
@@ -352,6 +352,11 @@ tmux_conf_copy_to_os_clipboard=false
 # move status line to top
 #set -g status-position top
 
+# -- claude code
+# -- https://gist.github.com/jftuga/ffa03dbf4cd818f00cc32ce4186d6c1c
+bind-key -n S-Enter send-keys Escape "[13;2u"
+set -s extended-keys on
+set -as terminal-features 'tmux-256color:extkeys'
 
 # -- tpm -----------------------------------------------------------------------
 
