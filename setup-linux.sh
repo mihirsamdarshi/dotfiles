@@ -271,7 +271,7 @@ function create_link() {
 # link all config files
 create_link ~/.dotfiles/.gitignore ~/.gitignore
 # link fish config files
-create_link ~/.dotfiles/fish/conf/config.fish ~/.config/fish/config.fish
+create_link ~/.dotfiles/fish/config.fish ~/.config/fish/config.fish
 create_link ~/.dotfiles/fish/functions ~/.config/fish/functions
 create_link ~/.dotfiles/fish/conf.d ~/.config/fish/conf.d
 create_link ~/.dotfiles/starship.toml ~/.config/starship.toml
