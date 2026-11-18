@@ -146,5 +146,8 @@ esac
 # pnpm end
 
 # zoxide
-eval "$(zoxide init --cmd cd zsh)"
+if [[ "$CLAUDECODE" != "1" ]]; then
+  eval "$(zoxide init --cmd cd zsh)"
+fi
+
 
