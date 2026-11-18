@@ -1,6 +1,6 @@
 # MIT (c) Chris Apple
 
-set -l install_dir (dirname (status dirname))
+set -l install_dir (path dirname (status dirname))
 set -x FORGIT_INSTALL_DIR "$install_dir/conf.d"
 set -x FORGIT "$FORGIT_INSTALL_DIR/bin/git-forgit"
 if not test -e "$FORGIT"
@@ -10,21 +10,6 @@ end
 
 function forgit::warn
     printf "%b[Warn]%b %s\n" '\e[0;33m' '\e[0m' "$argv" >&2
-end
-
-# backwards compatibility:
-# export all user-defined FORGIT variables to make them available in git-forgit
-set unexported_vars 0
-set | awk -F ' ' '{ print $1 }' | grep FORGIT_ | while read var
-    if not set -x | grep -q "^$var\b"
-        if test $unexported_vars = 0
-            forgit::warn "Config options have to be exported in future versions of forgit."
-            forgit::warn "Please update your config accordingly:"
-        end
-        forgit::warn "  set -x $var \"$$var\""
-        set unexported_vars (math $unexported_vars + 1)
-        set -x $var $$var
-    end
 end
 
 # alias `git-forgit` to the full-path of the command
